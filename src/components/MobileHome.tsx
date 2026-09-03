@@ -35,7 +35,7 @@ export default function MobileHome() {
     },
   ];
 
-  const perPage = 8;
+  const perPage = 6;
   const [currentPage, setCurrentPage] = useState(0);
   const touchStartX = useRef(0);
 
