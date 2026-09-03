@@ -5,13 +5,13 @@ import { useDesktop } from "@/context/DesktopContext";
 
 export default function Dock() {
   const { toggleWindow, openWindow, setProjectEntry } = useDesktop();
-  const dockRef = useRef(null);
+  const dockRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     const dock = dockRef.current;
     if (!dock) return;
 
-    const items = Array.from(dock.querySelectorAll(".dock-link"));
+    const items = Array.from(dock.querySelectorAll<HTMLElement>(".dock-link"));
     const range = 150;
     const maxScale = 1.4;
 
@@ -19,7 +19,7 @@ export default function Dock() {
       items.forEach((item) => item.style.removeProperty("--dock-scale"));
     }
 
-    function handleMouseMove(e) {
+    function handleMouseMove(e: MouseEvent) {
       items.forEach((item) => {
         const rect = item.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
