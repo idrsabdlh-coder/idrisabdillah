@@ -39,7 +39,7 @@ export default function Dock() {
   }, []);
 
   return (
-    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+    <nav className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
       <ul
         ref={dockRef}
         id="dock"

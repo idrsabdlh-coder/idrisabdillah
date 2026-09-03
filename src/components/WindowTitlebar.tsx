@@ -51,7 +51,7 @@ export default function WindowTitlebar({
 
       <div className="flex items-center gap-2.5 sm:gap-3 text-neutral-400 shrink-0">
         {SOCIALS.map((s) => (
-          
+          <a
             key={s.label}
             href={s.href}
             target="_blank"
@@ -64,7 +64,7 @@ export default function WindowTitlebar({
             </svg>
           </a>
         ))}
-        
+          <a
           href="mailto:jafaryabdilah@gmail.com"
           onMouseDown={(e) => e.stopPropagation()}
           className="hover:text-neutral-700"
