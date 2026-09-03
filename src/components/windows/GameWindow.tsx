@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Window from "@/components/Window";
@@ -125,10 +125,17 @@ export default function GameWindow() {
     draw();
   }, [draw, running]);
 
+  // Dipakai bersama oleh keyboard, swipe, dan tombol D-pad di layar
+  const setDirection = useCallback((nd: Point) => {
+    const d = dirRef.current;
+    // cegah belok 180 derajat langsung
+    if (nd.x === -d.x && nd.y === -d.y) return;
+    nextDirRef.current = nd;
+  }, []);
+
   // Keyboard controls
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      const d = dirRef.current;
       const map: Record<string, Point> = {
         ArrowUp: { x: 0, y: -1 },
         ArrowDown: { x: 0, y: 1 },
@@ -142,15 +149,13 @@ export default function GameWindow() {
       const nd = map[e.key];
       if (!nd) return;
       e.preventDefault();
-      // cegah belok 180 derajat langsung
-      if (nd.x === -d.x && nd.y === -d.y) return;
-      nextDirRef.current = nd;
+      setDirection(nd);
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  }, [setDirection]);
 
-  // Touch swipe controls
+  // Touch swipe controls (di area canvas)
   function handleTouchStart(e: React.TouchEvent) {
     touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   }
@@ -158,7 +163,6 @@ export default function GameWindow() {
     if (!touchStart.current) return;
     const dx = e.changedTouches[0].clientX - touchStart.current.x;
     const dy = e.changedTouches[0].clientY - touchStart.current.y;
-    const d = dirRef.current;
     let nd: Point | null = null;
     if (Math.abs(dx) > Math.abs(dy)) {
       if (Math.abs(dx) < 20) return;
@@ -167,22 +171,21 @@ export default function GameWindow() {
       if (Math.abs(dy) < 20) return;
       nd = dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 };
     }
-    if (nd.x === -d.x && nd.y === -d.y) return;
-    nextDirRef.current = nd;
+    setDirection(nd);
   }
 
   return (
     <Window name="Game" widthClass="w-[26rem]">
       <WindowTitlebar name="Game" title="Snake" />
 
-      <div className="p-5 flex flex-col items-center bg-neutral-900">
+      <div className="flex-1 p-5 flex flex-col items-center bg-neutral-900 overflow-y-auto">
         <div className="flex items-center justify-between w-full max-w-[360px] mb-3 text-sm text-white/80">
           <span>Skor: <b className="text-emerald-400">{score}</b></span>
           <span>Terbaik: <b className="text-amber-400">{best}</b></span>
         </div>
 
         <div
-          className="relative rounded-xl overflow-hidden border border-white/10 touch-none"
+          className="relative w-full max-w-[min(90vw,360px)] aspect-square rounded-xl overflow-hidden border border-white/10 touch-none"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -190,7 +193,7 @@ export default function GameWindow() {
             ref={canvasRef}
             width={GRID * CELL}
             height={GRID * CELL}
-            className="block"
+            className="block w-full h-full"
           />
 
           {(!running || gameOver) && (
@@ -203,11 +206,60 @@ export default function GameWindow() {
                 {gameOver ? "Main Lagi" : "Mulai Main"}
               </button>
               <p className="text-[11px] text-white/50 text-center px-6">
-                Gunakan tombol panah / WASD di desktop,<br />atau swipe di layar HP
+                Gunakan tombol panah / WASD di desktop,<br />atau swipe / tombol di layar HP
               </p>
             </div>
           )}
         </div>
+
+        {/* D-pad on-screen — kontrol utama untuk mobile, muncul selama game berjalan */}
+        {running && !gameOver && (
+          <div className="md:hidden mt-5 grid grid-cols-3 grid-rows-3 gap-2 w-[168px] select-none">
+            <span />
+            <button
+              onClick={() => setDirection({ x: 0, y: -1 })}
+              aria-label="Atas"
+              className="col-start-2 row-start-1 w-12 h-12 rounded-xl bg-white/10 active:bg-white/20 flex items-center justify-center text-white"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <path d="M12 19V5M5 12l7-7 7 7" />
+              </svg>
+            </button>
+            <span />
+
+            <button
+              onClick={() => setDirection({ x: -1, y: 0 })}
+              aria-label="Kiri"
+              className="col-start-1 row-start-2 w-12 h-12 rounded-xl bg-white/10 active:bg-white/20 flex items-center justify-center text-white"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <path d="M19 12H5M12 5l-7 7 7 7" />
+              </svg>
+            </button>
+            <span className="col-start-2 row-start-2 rounded-xl bg-white/5" />
+            <button
+              onClick={() => setDirection({ x: 1, y: 0 })}
+              aria-label="Kanan"
+              className="col-start-3 row-start-2 w-12 h-12 rounded-xl bg-white/10 active:bg-white/20 flex items-center justify-center text-white"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <span />
+            <button
+              onClick={() => setDirection({ x: 0, y: 1 })}
+              aria-label="Bawah"
+              className="col-start-2 row-start-3 w-12 h-12 rounded-xl bg-white/10 active:bg-white/20 flex items-center justify-center text-white"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <path d="M12 5v14M5 12l7 7 7-7" />
+              </svg>
+            </button>
+            <span />
+          </div>
+        )}
       </div>
     </Window>
   );
