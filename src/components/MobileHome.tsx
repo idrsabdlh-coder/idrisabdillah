@@ -19,8 +19,8 @@ export default function MobileHome() {
   const { openWindow, setProjectEntry } = useDesktop();
 
   const mobileApps: MobileApp[] = [
-    { key: "about", title: "About Me", kind: "about", color: "bg-blue-500", emoji: "👤" },
-    { key: "Resume", title: "Resume", kind: "resume", color: "bg-amber-400", emoji: "📄" },
+    { key: "about", title: "About Me", kind: "about", color: "bg-blue-500" },
+    { key: "Resume", title: "Resume", kind: "resume", color: "bg-amber-400" },
     ...Object.keys(PROJECTS).map((k) => ({
       key: k,
       title: PROJECTS[k].title,
@@ -119,12 +119,42 @@ export default function MobileHome() {
                 <button key={app.key} onClick={() => openApp(app)} className="flex flex-col items-center gap-1">
                   <div
                     className={`w-14 h-14 rounded-2xl shadow-md flex items-center justify-center overflow-hidden relative ${
-                      app.color || "bg-neutral-800"
+                      app.color ||
+                      (app.kind === "project" ? "bg-gradient-to-b from-slate-500 to-slate-700" : "bg-neutral-800")
                     }`}
                   >
                     {app.iconImg ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={app.iconImg} alt={app.title} className="w-full h-full object-cover" />
+                    ) : app.kind === "about" ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-7 h-7"
+                      >
+                        <circle cx="12" cy="8" r="3.5" />
+                        <path d="M5 20c0-3.5 3.13-6 7-6s7 2.5 7 6" />
+                      </svg>
+                    ) : app.kind === "resume" ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-7 h-7"
+                      >
+                        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" />
+                        <path d="M14 3v5h5" />
+                        <path d="M9 13h6M9 17h6M9 9h2" />
+                      </svg>
                     ) : app.emoji ? (
                       <span className="text-2xl">{app.emoji}</span>
                     ) : app.kind === "music" ? (
@@ -141,8 +171,30 @@ export default function MobileHome() {
                         <ellipse cx="17.5" cy="15.4" rx="2.5" ry="2" fill="white" />
                       </svg>
                     ) : app.icon ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-7 h-7"
+                      >
                         <path d={ICONS[app.icon]} />
+                      </svg>
+                    ) : app.kind === "project" ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-7 h-7"
+                      >
+                        <path d="M4 7h5l2 2h9v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" />
                       </svg>
                     ) : null}
                   </div>
