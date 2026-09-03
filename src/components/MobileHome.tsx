@@ -8,7 +8,7 @@ import { ICONS } from "@/lib/icons";
 type MobileApp = {
   key: string;
   title: string;
-  kind: "about" | "project" | "music";
+  kind: "about" | "project" | "music" | "resume" | "game";
   iconImg?: string;
   icon?: string;
   emoji?: string;
@@ -20,6 +20,7 @@ export default function MobileHome() {
 
   const mobileApps: MobileApp[] = [
     { key: "about", title: "About Me", kind: "about", color: "bg-blue-500", emoji: "👤" },
+    { key: "Resume", title: "Resume", kind: "resume", color: "bg-amber-400", emoji: "📄" },
     ...Object.keys(PROJECTS).map((k) => ({
       key: k,
       title: PROJECTS[k].title,
@@ -27,6 +28,13 @@ export default function MobileHome() {
       iconImg: PROJECTS[k].iconImg,
       icon: PROJECTS[k].icon,
     })),
+    {
+      key: "Game",
+      title: "Game",
+      kind: "game",
+      color: "bg-gradient-to-b from-emerald-400 via-emerald-500 to-emerald-600",
+      emoji: "🎮",
+    },
     {
       key: "Music",
       title: "Music",
@@ -52,6 +60,10 @@ export default function MobileHome() {
       setProjectEntry(app.key);
     } else if (app.kind === "music") {
       openWindow("Music");
+    } else if (app.kind === "resume") {
+      openWindow("Resume");
+    } else if (app.kind === "game") {
+      openWindow("Game");
     }
   }
 
@@ -155,7 +167,7 @@ export default function MobileHome() {
         </div>
       )}
 
-      {/* Dock bawah (4 app favorit) */}
+      {/* Dock bawah (5 app favorit) */}
       <div className="absolute bottom-0 inset-x-0 pb-6 pt-3 px-5 bg-white/10 backdrop-blur-xl rounded-t-3xl">
         <div className="flex justify-around">
           <a href="mailto:jafaryabdilah@gmail.com" className="w-14 h-14 rounded-2xl bg-blue-500 shadow-md flex items-center justify-center">
@@ -167,6 +179,16 @@ export default function MobileHome() {
           <a href="https://github.com/idrsabdlh-coder" target="_blank" className="w-14 h-14 rounded-2xl bg-neutral-900 shadow-md flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6">
               <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49v-1.94c-2.78.62-3.37-1.36-3.37-1.36-.46-1.2-1.11-1.52-1.11-1.52-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.9 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.9-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.93-2.35 4.8-4.58 5.05.36.32.68.94.68 1.9v2.82c0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" />
+            </svg>
+          </a>
+          <a
+            href="https://www.instagram.com/idrsabdllh?igsi=eGlwc2U0Nmx0cXFv&utm_source=qr"
+            target="_blank"
+            style={{ background: "linear-gradient(135deg, #fbbf24, #ec4899, #7c3aed)" }}
+            className="w-14 h-14 rounded-2xl shadow-md flex items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6">
+              <path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.97.24 2.43.4a4.9 4.9 0 0 1 1.77 1.15 4.9 4.9 0 0 1 1.15 1.77c.16.46.35 1.26.4 2.43.07 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.24 1.97-.4 2.43a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.46.16-1.26.35-2.43.4-1.25.07-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.97-.24-2.43-.4a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.16-.46-.35-1.26-.4-2.43C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.24-1.97.4-2.43A4.9 4.9 0 0 1 3.82 2.95 4.9 4.9 0 0 1 5.6 1.8c.46-.16 1.26-.35 2.43-.4C9.28 1.33 9.68 1.33 12 1.33m0 1.8c-3.15 0-3.52 0-4.76.07-1.03.05-1.6.22-1.97.36-.5.19-.85.43-1.22.8-.37.37-.6.72-.8 1.22-.14.37-.3.94-.36 1.97-.07 1.24-.07 1.6-.07 4.76s0 3.52.07 4.76c.05 1.03.22 1.6.36 1.97.19.5.43.85.8 1.22.37.37.72.6 1.22.8.37.14.94.3 1.97.36 1.24.07 1.6.07 4.76.07s3.52 0 4.76-.07c1.03-.05 1.6-.22 1.97-.36.5-.2.85-.43 1.22-.8.37-.37.6-.72.8-1.22.14-.37.3-.94.36-1.97.07-1.24.07-1.6.07-4.76s0-3.52-.07-4.76c-.05-1.03-.22-1.6-.36-1.97a3.1 3.1 0 0 0-.8-1.22 3.1 3.1 0 0 0-1.22-.8c-.37-.14-.94-.3-1.97-.36-1.24-.07-1.6-.07-4.76-.07Zm0 4.6a5.4 5.4 0 1 1 0 10.8 5.4 5.4 0 0 1 0-10.8Zm0 1.8a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm5.6-1.98a1.26 1.26 0 1 1-2.52 0 1.26 1.26 0 0 1 2.52 0Z" />
             </svg>
           </a>
           <a href="https://www.linkedin.com/in/idris-abdillah-54402a3b7" target="_blank" className="w-14 h-14 rounded-2xl bg-blue-600 shadow-md flex items-center justify-center">
