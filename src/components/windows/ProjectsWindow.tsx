@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Window from "@/components/Window";
 import WindowTitlebar from "@/components/WindowTitlebar";
@@ -18,8 +18,8 @@ export default function ProjectsWindow() {
           name="Projects"
           breadcrumb={
             <div className="text-sm text-neutral-500">
-              <span>User</span>
-              <span className="mx-1 text-neutral-300">/</span>
+              <span className="hidden sm:inline">User</span>
+              <span className="hidden sm:inline mx-1 text-neutral-300">/</span>
               <span>Projects</span>
               <span className="mx-1 text-neutral-300">/</span>
               <span className="text-neutral-800 font-medium">{project.title}</span>
@@ -27,9 +27,9 @@ export default function ProjectsWindow() {
           }
         />
 
-        <div className="flex flex-1 overflow-hidden">
-          {/* Sidebar list proyek */}
-          <div className="w-56 border-r border-black/10 overflow-y-auto shrink-0 py-4 px-3">
+        <div className="flex flex-1 overflow-hidden flex-col md:flex-row">
+          {/* Sidebar list proyek — desktop only */}
+          <div className="hidden md:block w-56 border-r border-black/10 overflow-y-auto shrink-0 py-4 px-3">
             <p className="text-xs font-medium text-neutral-400 px-2 mb-1.5">Projects</p>
             {keys.map((key) => {
               const p = PROJECTS[key];
@@ -58,13 +58,46 @@ export default function ProjectsWindow() {
             })}
           </div>
 
+          {/* Selector proyek — mobile only, chip horizontal yang bisa discroll */}
+          <div className="md:hidden shrink-0 border-b border-black/10 py-3 px-4 overflow-x-auto">
+            <div className="flex items-center gap-2 w-max">
+              {keys.map((key) => {
+                const p = PROJECTS[key];
+                const active = projectEntry === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setProjectEntry(key)}
+                    className={`flex items-center gap-2 shrink-0 px-3 py-1.5 rounded-full border text-sm transition-colors ${
+                      active
+                        ? "bg-neutral-900 text-white border-neutral-900"
+                        : "bg-white text-neutral-600 border-neutral-200"
+                    }`}
+                  >
+                    <div className="w-5 h-5 rounded-full overflow-hidden bg-neutral-200 shrink-0 flex items-center justify-center">
+                      {p.iconImg ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={p.iconImg} alt={p.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="w-3 h-3 text-neutral-400">
+                          <path d={ICONS[p.icon]} />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="whitespace-nowrap">{p.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Detail proyek */}
           <div className="flex-1 overflow-y-auto">
             <div className="p-6 pb-10">
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-2xl font-bold">{project.title}</h3>
                 {project.visit && (
-                  <a
+                  
                     href={project.visit}
                     target="_blank"
                     rel="noopener noreferrer"

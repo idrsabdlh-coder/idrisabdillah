@@ -29,10 +29,10 @@ export default function WindowTitlebar({
   return (
     <div
       onMouseDown={(e) => startDrag(e, name)}
-      className="flex items-center justify-between gap-3 px-4 py-3 border-b border-black/10 shrink-0 cursor-move select-none"
+      className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 border-b border-black/10 shrink-0 cursor-move select-none"
     >
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1 overflow-hidden">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => {
@@ -45,13 +45,13 @@ export default function WindowTitlebar({
           <span className="w-3 h-3 rounded-full bg-yellow-500" />
           <span className="w-3 h-3 rounded-full bg-green-500" />
         </div>
-        {title && <span className="text-sm text-neutral-500">{title}</span>}
-        {breadcrumb}
+        {title && <span className="text-sm text-neutral-500 truncate">{title}</span>}
+        {breadcrumb && <div className="min-w-0 truncate">{breadcrumb}</div>}
       </div>
 
-      <div className="flex items-center gap-3 text-neutral-400">
+      <div className="flex items-center gap-2.5 sm:gap-3 text-neutral-400 shrink-0">
         {SOCIALS.map((s) => (
-          <a
+          
             key={s.label}
             href={s.href}
             target="_blank"
@@ -64,7 +64,7 @@ export default function WindowTitlebar({
             </svg>
           </a>
         ))}
-        <a
+        
           href="mailto:jafaryabdilah@gmail.com"
           onMouseDown={(e) => e.stopPropagation()}
           className="hover:text-neutral-700"

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -30,7 +30,7 @@ export default function TopBar() {
   }, []);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-30 flex items-center justify-between px-6 py-3 text-sm text-white/90">
+    <header className="fixed top-0 inset-x-0 z-30 hidden md:flex items-center justify-between px-6 py-3 text-sm text-white/90">
       <span className="font-medium">Idris Abdillah</span>
 
       <div className="flex items-center gap-4">
