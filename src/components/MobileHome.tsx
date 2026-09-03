@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDesktop } from "@/context/DesktopContext";
 import { PROJECTS } from "@/lib/data";
 import { ICONS } from "@/lib/icons";
@@ -17,6 +17,16 @@ type MobileApp = {
 
 export default function MobileHome() {
   const { openWindow, setProjectEntry } = useDesktop();
+
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const timeStr = now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+  const dateStr = now.toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short" });
 
   const mobileApps: MobileApp[] = [
     { key: "about", title: "About Me", kind: "about", color: "bg-blue-500" },
@@ -81,7 +91,7 @@ export default function MobileHome() {
     <div className="block md:hidden fixed inset-0 z-20 overflow-hidden">
       {/* Status bar ala iOS */}
       <div className="pt-3 px-6 flex items-center justify-between text-white text-sm font-semibold">
-        <span />
+        <span>{timeStr}</span>
         <div className="flex items-center gap-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-4 h-4">
             <path d="M2 22h2v-2H2v2zm4 0h2v-6H6v6zm4 0h2v-10h-2v10zm4 0h2v-14h-2v14zm4 0h2V4h-2v18z" />
@@ -96,9 +106,14 @@ export default function MobileHome() {
         </div>
       </div>
 
+      {/* Tanggal di bawah status bar */}
+      <div className="px-6 mt-1">
+        <span className="text-white/70 text-xs">{dateStr}</span>
+      </div>
+
       {/* App grid dengan swipe antar halaman */}
       <div
-        className="mt-8 h-[calc(100%-180px)] overflow-hidden"
+        className="mt-6 h-[calc(100%-190px)] overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
