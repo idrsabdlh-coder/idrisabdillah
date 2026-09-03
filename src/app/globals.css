@@ -54,3 +54,14 @@
 .group:hover .tooltip {
   opacity: 1;
 }
+@keyframes mobileWindowIn {
+  from { transform: translateY(100%); opacity: 0.5; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+
+@keyframes windowIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
