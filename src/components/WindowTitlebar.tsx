@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useDesktop } from "@/context/DesktopContext";
+import { useWindowClose } from "@/components/Window";
 
 const SOCIALS = [
   {
@@ -24,12 +25,17 @@ export default function WindowTitlebar({
   title?: string;
   breadcrumb?: React.ReactNode;
 }) {
-  const { closeWindow, startDrag } = useDesktop();
+  const { startDrag } = useDesktop();
+  const { requestClose } = useWindowClose();
 
   return (
     <div
       onMouseDown={(e) => startDrag(e, name)}
-      className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 border-b border-black/10 shrink-0 cursor-move select-none"
+      className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 shrink-0 cursor-move select-none theme-transition"
+      style={{
+        backgroundColor: "var(--window-titlebar-bg)",
+        borderBottom: "1px solid var(--window-border)",
+      }}
     >
       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1 overflow-hidden">
         <div className="flex items-center gap-2 shrink-0">
@@ -37,19 +43,29 @@ export default function WindowTitlebar({
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
-              closeWindow(name);
+              requestClose(name);
             }}
-            className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400"
+            className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
             aria-label="Tutup"
           />
           <span className="w-3 h-3 rounded-full bg-yellow-500" />
           <span className="w-3 h-3 rounded-full bg-green-500" />
         </div>
-        {title && <span className="text-sm text-neutral-500 truncate">{title}</span>}
+        {title && (
+          <span
+            className="text-sm truncate theme-transition"
+            style={{ color: "var(--window-titlebar-text)" }}
+          >
+            {title}
+          </span>
+        )}
         {breadcrumb && <div className="min-w-0 truncate">{breadcrumb}</div>}
       </div>
 
-      <div className="flex items-center gap-2.5 sm:gap-3 text-neutral-400 shrink-0">
+      <div
+        className="flex items-center gap-2.5 sm:gap-3 shrink-0 theme-transition"
+        style={{ color: "var(--window-titlebar-text)" }}
+      >
         {SOCIALS.map((s) => (
           <a
             key={s.label}
@@ -57,17 +73,17 @@ export default function WindowTitlebar({
             target="_blank"
             rel="noopener"
             onMouseDown={(e) => e.stopPropagation()}
-            className="hover:text-neutral-700"
+            className="transition-colors hover:text-white"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
               <path d={s.path} />
             </svg>
           </a>
         ))}
-          <a
+        <a
           href="mailto:jafaryabdilah@gmail.com"
           onMouseDown={(e) => e.stopPropagation()}
-          className="hover:text-neutral-700"
+          className="transition-colors hover:text-white"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="w-4 h-4">
             <path d="M4 6h16v12H4z" />

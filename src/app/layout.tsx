@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Idris Abdillah - homepage",
-  description: "Homepage",};
+  description: "Homepage",
+};
 
 export default function RootLayout({
   children,
@@ -11,8 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id">
-      <body className="antialiased">{children}</body>
+    <html lang="id" suppressHydrationWarning>
+      <body className="antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

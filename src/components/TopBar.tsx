@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useTheme, ThemeMode, ThemePhase } from "@/context/ThemeContext";
 
 const SOCIALS = [
   {
@@ -20,8 +21,32 @@ const SOCIALS = [
   },
 ];
 
+const THEME_OPTIONS: { id: ThemeMode; label: string; icon: string; desc: string }[] = [
+  { id: "auto", label: "Otomatis", icon: "⚡", desc: "Ikuti Jam Pengunjung" },
+  { id: "pagi", label: "Pagi", icon: "🌅", desc: "05:00 – 10:59" },
+  { id: "siang", label: "Siang", icon: "☀️", desc: "11:00 – 15:59" },
+  { id: "sore", label: "Sore", icon: "🌇", desc: "16:00 – 18:29" },
+  { id: "malam", label: "Malam", icon: "🌙", desc: "18:30 – 04:59" },
+];
+
+function getThemeSymbol(phase: ThemePhase): string {
+  switch (phase) {
+    case "pagi":
+      return "🌅";
+    case "siang":
+      return "☀️";
+    case "sore":
+      return "🌇";
+    case "malam":
+      return "🌙";
+  }
+}
+
 export default function TopBar() {
   const [now, setNow] = useState<Date | null>(null);
+  const { phase, mode, setMode } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setNow(new Date());
@@ -29,29 +54,180 @@ export default function TopBar() {
     return () => clearInterval(id);
   }, []);
 
+  // Tutup menu saat klik di luar
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => window.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
+
   return (
-    <header className="fixed top-0 inset-x-0 z-30 hidden md:flex items-center justify-between px-6 py-3 text-sm text-white/90">
-      <span className="font-medium">Idris Abdillah</span>
+    <header
+      className="fixed top-0 inset-x-0 z-30 hidden md:flex items-center justify-between px-6 py-2.5 text-sm backdrop-blur-md theme-transition"
+      style={{
+        backgroundColor: "var(--topbar-bg)",
+        color: "var(--topbar-text)",
+        borderBottom: "1px solid var(--topbar-border)",
+        animationName: "introFadeDown",
+        animationDuration: "0.5s",
+        animationDelay: "0s",
+        animationFillMode: "both",
+        animationTimingFunction: "ease-out",
+      }}
+    >
+      <div className="flex items-center gap-3">
+        <span className="font-semibold tracking-wide">Idris Abdillah</span>
+      </div>
 
       <div className="flex items-center gap-4">
         {SOCIALS.map((s) => (
-          <a key={s.label} href={s.href} target="_blank" rel="noopener" className="hover:text-white">
+          <a
+            key={s.label}
+            href={s.href}
+            target="_blank"
+            rel="noopener"
+            aria-label={s.label}
+            className="topbar-social"
+            style={{ color: "var(--topbar-text-muted)" }}
+          >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
               <path d={s.path} />
             </svg>
           </a>
         ))}
 
-        <span className="w-px h-4 bg-white/20" />
+        <span
+          className="w-px h-4 theme-transition"
+          style={{ backgroundColor: "var(--topbar-border)" }}
+        />
 
-        {/* Render tanggal/jam hanya setelah mount, biar gak mismatch SSR vs client */}
+        {/* Tombol Tema (macOS Control Center style) */}
+        <div ref={menuRef} className="relative">
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Pilih Tema"
+            aria-expanded={menuOpen}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium theme-transition hover:opacity-90 active:scale-95"
+            style={{
+              backgroundColor: "var(--dock-bg)",
+              border: "1px solid var(--topbar-border)",
+              color: "var(--topbar-text)",
+            }}
+          >
+            <span className="text-sm leading-none">{getThemeSymbol(phase)}</span>
+            <span className="capitalize">{mode === "auto" ? "Otomatis" : phase}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className={`w-3 h-3 transition-transform duration-200 ${menuOpen ? "rotate-180" : ""}`}
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+
+          {/* Dropdown Popover */}
+          {menuOpen && (
+            <div
+              className="absolute right-0 top-full mt-2 w-56 rounded-2xl p-1.5 backdrop-blur-2xl shadow-2xl z-50 animate-[windowIn_0.15s_ease-out] theme-transition"
+              style={{
+                backgroundColor: "var(--window-titlebar-bg)",
+                border: "1px solid var(--window-border)",
+                color: "var(--window-text)",
+              }}
+            >
+              <div className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+                Pilih Fase Waktu
+              </div>
+              <div className="space-y-0.5">
+                {THEME_OPTIONS.map((opt) => {
+                  const isActive = mode === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => {
+                        setMode(opt.id);
+                        setMenuOpen(false);
+                      }}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+                      style={
+                        isActive
+                          ? {
+                              backgroundColor: "var(--theme-accent)",
+                              color: "#FFFFFF",
+                            }
+                          : undefined
+                      }
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-base leading-none">{opt.icon}</span>
+                        <div>
+                          <div className="font-medium leading-tight">{opt.label}</div>
+                          <div
+                            className="text-[10px] leading-tight"
+                            style={{
+                              color: isActive ? "rgba(255,255,255,0.85)" : "var(--window-titlebar-text)",
+                            }}
+                          >
+                            {opt.desc}
+                          </div>
+                        </div>
+                      </div>
+                      {isActive && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          className="w-4 h-4 text-white shrink-0"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <span
+          className="w-px h-4 theme-transition"
+          style={{ backgroundColor: "var(--topbar-border)" }}
+        />
+
+        {/* Tanggal & Jam real-time */}
         {now && (
-          <>
+          <div className="flex items-center gap-3">
             <span>
-              {now.toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+              {now.toLocaleDateString("id-ID", {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
             </span>
-            <span>{now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}</span>
-          </>
+            <span className="tabular-nums font-medium">
+              {now.toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
+            </span>
+          </div>
         )}
       </div>
     </header>

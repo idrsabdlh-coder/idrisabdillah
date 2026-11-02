@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { createContext, useContext, useRef, useState, useCallback, ReactNode } from "react";
 
@@ -21,6 +21,8 @@ type DesktopContextType = {
   startDrag: (e: React.MouseEvent, key: string) => void;
   projectEntry: string;
   setProjectEntry: (key: string) => void;
+  activeWindow: string | null;
+  setActiveWindow: (name: string | null) => void;
 };
 
 const DesktopContext = createContext<DesktopContextType | null>(null);
@@ -37,20 +39,28 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [positions, setPositions] = useState<Record<string, Position>>(DEFAULT_POSITIONS);
   const [projectEntry, setProjectEntry] = useState("tenong");
+  const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const drag = useRef<DragState>({ active: false, key: null, startX: 0, startY: 0 });
 
   const openWindow = useCallback((name: string) => {
     setOpenWindows((prev) => (prev.includes(name) ? prev : [...prev, name]));
+    setActiveWindow(name);
   }, []);
 
   const closeWindow = useCallback((name: string) => {
     setOpenWindows((prev) => prev.filter((w) => w !== name));
+    setActiveWindow((prev) => (prev === name ? null : prev));
   }, []);
 
   const toggleWindow = useCallback((name: string) => {
-    setOpenWindows((prev) =>
-      prev.includes(name) ? prev.filter((w) => w !== name) : [...prev, name]
-    );
+    setOpenWindows((prev) => {
+      if (prev.includes(name)) {
+        setActiveWindow((a) => (a === name ? null : a));
+        return prev.filter((w) => w !== name);
+      }
+      setActiveWindow(name);
+      return [...prev, name];
+    });
   }, []);
 
   const isOpen = useCallback((name: string) => openWindows.includes(name), [openWindows]);
@@ -102,6 +112,8 @@ export function DesktopProvider({ children }: { children: ReactNode }) {
         startDrag,
         projectEntry,
         setProjectEntry,
+        activeWindow,
+        setActiveWindow,
       }}
     >
       {children}

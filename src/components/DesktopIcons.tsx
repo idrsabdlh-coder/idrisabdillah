@@ -21,6 +21,8 @@ export default function DesktopIcons() {
     <div className="hidden md:grid fixed top-20 left-6 z-30 grid-cols-2 gap-x-6 gap-y-8">
       {keys.map((key, idx) => {
         const p = PROJECTS[key];
+        // stagger delay: 0.3s base + 0.07s per icon
+        const delay = `${0.3 + idx * 0.07}s`;
         return (
           <button
             key={key}
@@ -28,7 +30,16 @@ export default function DesktopIcons() {
             className="flex flex-col items-center gap-1.5 w-20 group"
             style={idx % 2 === 1 ? { marginTop: "1.5rem" } : undefined}
           >
-            <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg bg-neutral-800/60 backdrop-blur flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div
+              className="desktop-icon w-16 h-16 rounded-2xl overflow-hidden shadow-lg bg-neutral-800/60 backdrop-blur flex items-center justify-center"
+              style={{
+                animationName: "introFadeUp",
+                animationDuration: "0.5s",
+                animationDelay: delay,
+                animationFillMode: "both",
+                animationTimingFunction: "cubic-bezier(0.34,1.2,0.64,1)",
+              }}
+            >
               {p.iconImg ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={p.iconImg} alt={p.title} className="w-full h-full object-cover" />
@@ -43,8 +54,21 @@ export default function DesktopIcons() {
         );
       })}
 
-      <button onClick={() => toggleWindow("Music")} className="flex flex-col items-center gap-1.5 w-20 group">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-red-400 via-red-500 to-red-600 flex items-center justify-center shadow-lg ring-1 ring-black/5 group-hover:scale-105 transition-transform overflow-hidden">
+      {/* Music icon — stagger after project icons */}
+      <button
+        onClick={() => toggleWindow("Music")}
+        className="flex flex-col items-center gap-1.5 w-20 group"
+      >
+        <div
+          className="desktop-icon w-16 h-16 rounded-2xl bg-gradient-to-b from-red-400 via-red-500 to-red-600 flex items-center justify-center shadow-lg ring-1 ring-black/5 overflow-hidden"
+          style={{
+            animationName: "introFadeUp",
+            animationDuration: "0.5s",
+            animationDelay: `${0.3 + keys.length * 0.07}s`,
+            animationFillMode: "both",
+            animationTimingFunction: "cubic-bezier(0.34,1.2,0.64,1)",
+          }}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-8 h-8 drop-shadow-sm">
             <path d="M9 18V5l12-2v13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
             <circle cx="6" cy="18" r="3" />
