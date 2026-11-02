@@ -60,7 +60,10 @@ export default function AboutWindow() {
 
   return (
     <Window name="about" widthClass="w-[36rem]">
-      <div className="h-[80vh] flex flex-col">
+      <div
+        data-theme="light"
+        className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
+      >
         <WindowTitlebar name="about" title="About Me" />
 
         <div className="flex gap-2 px-6 pt-4 shrink-0">
@@ -98,7 +101,10 @@ export default function AboutWindow() {
                 </div>
               </div>
 
-              <div className="bg-neutral-100 rounded-lg p-4 text-sm text-neutral-700 leading-relaxed">
+              <div
+                  data-theme="light"
+                  className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
+                >
                 Mahasiswa Pendidikan Teknik Informatika (Semester 7) Universitas Muhammadiyah Surakarta yang
                 berfokus pada Software Development.
               </div>

@@ -13,7 +13,10 @@ export default function ProjectsWindow() {
 
   return (
     <Window name="Projects" widthClass="w-[56rem]">
-      <div className="h-[78vh] flex flex-col">
+      <div
+        data-theme="light"
+        className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
+      >
         <WindowTitlebar
           name="Projects"
           breadcrumb={

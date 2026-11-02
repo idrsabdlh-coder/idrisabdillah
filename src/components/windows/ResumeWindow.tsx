@@ -44,7 +44,10 @@ export default function ResumeWindow() {
 
   return (
     <Window name="Resume" widthClass="w-[56rem]">
-      <div className="h-[80vh] flex flex-col">
+      <div
+        data-theme="light"
+        className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
+      >
         <WindowTitlebar name="Resume" />
 
         <div className="flex gap-2 px-6 sm:px-8 pt-4 shrink-0 overflow-x-auto">
