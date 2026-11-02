@@ -24,6 +24,8 @@
   --tab-active-text: #0f172a;
 }
 
+
+
 [data-theme="light"] {
   color-scheme: light;
   --theme-accent: #0284c7;
@@ -375,17 +377,18 @@ html[data-opening="exiting"] .opening-name {
     to   { opacity: 1; }
   }
 }
-/* Perbaikan keterbacaan di tema gelap */
-[data-theme="dark"] .bg-neutral-100 { background-color: rgba(255, 255, 255, 0.1); }
-[data-theme="dark"] .border-neutral-200 { border-color: rgba(255, 255, 255, 0.18); }
-[data-theme="dark"] .border-black\/10 { border-color: rgba(255, 255, 255, 0.16); }
+/* Perbaikan keterbacaan di tema gelap.
+   :not([data-theme="light"] *) = jangan berlaku di dalam area yang dikunci terang */
+[data-theme="dark"] .bg-neutral-100:not([data-theme="light"] *) { background-color: rgba(255, 255, 255, 0.1); }
+[data-theme="dark"] .border-neutral-200:not([data-theme="light"] *) { border-color: rgba(255, 255, 255, 0.18); }
+[data-theme="dark"] .border-black\/10:not([data-theme="light"] *) { border-color: rgba(255, 255, 255, 0.16); }
 
-[data-theme="dark"] .text-neutral-900,
-[data-theme="dark"] .text-neutral-800 { color: #f8fafc; }
+[data-theme="dark"] .text-neutral-900:not([data-theme="light"] *),
+[data-theme="dark"] .text-neutral-800:not([data-theme="light"] *) { color: #f8fafc; }
 
-[data-theme="dark"] .text-neutral-700,
-[data-theme="dark"] .text-neutral-600 { color: #cbd5e1; }
+[data-theme="dark"] .text-neutral-700:not([data-theme="light"] *),
+[data-theme="dark"] .text-neutral-600:not([data-theme="light"] *) { color: #cbd5e1; }
 
-[data-theme="dark"] .text-neutral-500,
-[data-theme="dark"] .text-neutral-400,
-[data-theme="dark"] .text-neutral-300 { color: #94a3b8; }
+[data-theme="dark"] .text-neutral-500:not([data-theme="light"] *),
+[data-theme="dark"] .text-neutral-400:not([data-theme="light"] *),
+[data-theme="dark"] .text-neutral-300:not([data-theme="light"] *) { color: #94a3b8; }
