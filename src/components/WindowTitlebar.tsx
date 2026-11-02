@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useDesktop } from "@/context/DesktopContext";
 import { useWindowClose } from "@/components/Window";
@@ -38,18 +38,19 @@ export default function WindowTitlebar({
       }}
     >
       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1 overflow-hidden">
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-3 md:gap-2 shrink-0">
           <button
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
               requestClose(name);
             }}
-            className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
+            className="relative w-4 h-4 md:w-3 md:h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors
+                       after:content-[''] after:absolute after:-inset-3 md:after:-inset-1.5"
             aria-label="Tutup"
           />
-          <span className="w-3 h-3 rounded-full bg-yellow-500" />
-          <span className="w-3 h-3 rounded-full bg-green-500" />
+          <span className="w-4 h-4 md:w-3 md:h-3 rounded-full bg-yellow-500" />
+          <span className="w-4 h-4 md:w-3 md:h-3 rounded-full bg-green-500" />
         </div>
         {title && (
           <span

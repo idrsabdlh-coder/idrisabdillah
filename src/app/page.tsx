@@ -18,11 +18,11 @@ const PHASE_STYLES: Record<
   ThemePhase,
   { filter: string; overlay: string; tint: string }
 > = {
-  dark: {
-    filter: "brightness(0.72) saturate(0.9) contrast(1.12) hue-rotate(12deg)",
+    dark: {
+    filter: "brightness(0.92) saturate(1) contrast(1.05) hue-rotate(12deg)",
     overlay:
-      "linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(30, 27, 75, 0.45) 50%, rgba(2, 6, 23, 0.8) 100%)",
-    tint: "rgba(15, 23, 42, 0.45)",
+      "linear-gradient(180deg, rgba(15, 23, 42, 0.28) 0%, rgba(30, 27, 75, 0.2) 50%, rgba(2, 6, 23, 0.45) 100%)",
+    tint: "rgba(15, 23, 42, 0.15)",
   },
   light: {
     filter: "brightness(1.15) saturate(1.15) contrast(1.04)",
@@ -142,7 +142,6 @@ export default function Home() {
     <DesktopProvider>
       <main className="relative min-h-screen overflow-hidden bg-black theme-transition">
         <ParallaxWallpaper />
-        <div className="absolute inset-0 bg-black/10 pointer-events-none" />
 
         <TopBar />
         <Dock />

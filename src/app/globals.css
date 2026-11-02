@@ -4,27 +4,17 @@
 
 :root,
 [data-theme="dark"] {
-  color-scheme: dark;
-  --theme-accent: #818cf8;
-  --theme-accent-hover: #6366f1;
-  --topbar-bg: rgba(15, 23, 42, 0.65);
-  --topbar-text: #f8fafc;
-  --topbar-text-muted: rgba(248, 250, 252, 0.7);
-  --topbar-border: rgba(255, 255, 255, 0.12);
-  --dock-bg: rgba(255, 255, 255, 0.12);
-  --dock-border: rgba(255, 255, 255, 0.2);
-  --dock-tooltip-bg: #0f172a;
-  --dock-tooltip-text: #f8fafc;
-  --window-bg: #1e222d;
-  --window-text: #f1f5f9;
-  --window-titlebar-bg: rgba(30, 34, 45, 0.95);
-  --window-titlebar-text: #94a3b8;
-  --window-border: rgba(255, 255, 255, 0.12);
-  --window-shadow-active: 0 24px 60px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
-  --window-shadow-inactive: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.25);
-  --wallpaper-filter: brightness(0.72) saturate(0.9) contrast(1.12) hue-rotate(12deg);
-  --wallpaper-overlay: linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(30, 27, 75, 0.45) 50%, rgba(2, 6, 23, 0.8) 100%);
-  --wallpaper-tint: rgba(15, 23, 42, 0.45);
+   --window-bg: #2a2f3d;
+  --window-text: #f8fafc;
+  --window-titlebar-bg: rgba(42, 47, 61, 0.95);
+  --window-titlebar-text: #cbd5e1;
+  --window-border: rgba(255, 255, 255, 0.16);
+  --window-shadow-active: 0 24px 60px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.3);
+  --window-shadow-inactive: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  --wallpaper-filter: brightness(0.92) saturate(1) contrast(1.05) hue-rotate(12deg);
+  --wallpaper-overlay: linear-gradient(180deg, rgba(15, 23, 42, 0.28) 0%, rgba(30, 27, 75, 0.2) 50%, rgba(2, 6, 23, 0.45) 100%);
+  --wallpaper-tint: rgba(15, 23, 42, 0.15);
+  --menu-item-hover: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="light"] {
@@ -35,9 +25,7 @@
   [data-theme="light"] {
   --menu-item-hover: rgba(0, 0, 0, 0.05);
 }
-[data-theme="dark"] {
-  --menu-item-hover: rgba(255, 255, 255, 0.1);
-}
+
   --topbar-text: #0f172a;
   --topbar-text-muted: rgba(15, 23, 42, 0.7);
   --topbar-border: rgba(255, 255, 255, 0.5);

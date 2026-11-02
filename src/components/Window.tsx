@@ -77,16 +77,20 @@ export default function Window({ name, widthClass = "w-[36rem]", children }: Win
   }
 
   // MOBILE: full-screen ala buka app di iPhone
-  if (!isDesktop) {
+   if (!isDesktop) {
     return (
       <div
         className="fixed inset-0 z-40 flex flex-col animate-[mobileWindowIn_0.25s_ease-out] theme-transition"
         style={{
           backgroundColor: "var(--window-bg)",
           color: "var(--window-text)",
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
         }}
       >
-        {children}
+        <CloseInterceptor name={name} onClose={() => closeWindow(name)}>
+          {children}
+        </CloseInterceptor>
       </div>
     );
   }
