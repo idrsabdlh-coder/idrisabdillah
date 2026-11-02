@@ -18,29 +18,17 @@ const PHASE_STYLES: Record<
   ThemePhase,
   { filter: string; overlay: string; tint: string }
 > = {
-  pagi: {
-    filter: "brightness(1.05) saturate(1.1) hue-rotate(-8deg)",
-    overlay:
-      "linear-gradient(135deg, rgba(251, 146, 60, 0.3) 0%, rgba(254, 215, 170, 0.15) 50%, rgba(15, 23, 42, 0.35) 100%)",
-    tint: "rgba(245, 158, 11, 0.12)",
-  },
-  siang: {
-    filter: "brightness(1.15) saturate(1.15) contrast(1.04)",
-    overlay:
-      "linear-gradient(180deg, rgba(56, 189, 248, 0.22) 0%, rgba(186, 230, 253, 0.1) 50%, rgba(15, 23, 42, 0.3) 100%)",
-    tint: "rgba(14, 165, 233, 0.08)",
-  },
-  sore: {
-    filter: "brightness(0.92) saturate(1.3) hue-rotate(-22deg)",
-    overlay:
-      "linear-gradient(160deg, rgba(225, 29, 72, 0.35) 0%, rgba(249, 115, 22, 0.25) 45%, rgba(15, 23, 42, 0.6) 100%)",
-    tint: "rgba(244, 63, 94, 0.15)",
-  },
-  malam: {
+  dark: {
     filter: "brightness(0.72) saturate(0.9) contrast(1.12) hue-rotate(12deg)",
     overlay:
       "linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(30, 27, 75, 0.45) 50%, rgba(2, 6, 23, 0.8) 100%)",
     tint: "rgba(15, 23, 42, 0.45)",
+  },
+  light: {
+    filter: "brightness(1.15) saturate(1.15) contrast(1.04)",
+    overlay:
+      "linear-gradient(180deg, rgba(56, 189, 248, 0.22) 0%, rgba(186, 230, 253, 0.1) 50%, rgba(15, 23, 42, 0.3) 100%)",
+    tint: "rgba(14, 165, 233, 0.08)",
   },
 };
 

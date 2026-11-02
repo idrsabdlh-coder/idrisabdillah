@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
-/* ─── CSS Variables Per Fase Waktu ─────────────────────── */
+/* ─── CSS Variables: Mode Gelap & Terang ─────────────────── */
 
 :root,
-[data-theme="malam"] {
+[data-theme="dark"] {
+  color-scheme: dark;
   --theme-accent: #818cf8;
   --theme-accent-hover: #6366f1;
   --topbar-bg: rgba(15, 23, 42, 0.65);
@@ -26,33 +27,17 @@
   --wallpaper-tint: rgba(15, 23, 42, 0.45);
 }
 
-[data-theme="pagi"] {
-  --theme-accent: #d97706;
-  --theme-accent-hover: #b45309;
-  --topbar-bg: rgba(255, 255, 255, 0.45);
-  --topbar-text: #0f172a;
-  --topbar-text-muted: rgba(15, 23, 42, 0.7);
-  --topbar-border: rgba(255, 255, 255, 0.4);
-  --dock-bg: rgba(255, 255, 255, 0.38);
-  --dock-border: rgba(255, 255, 255, 0.5);
-  --dock-tooltip-bg: #ffffff;
-  --dock-tooltip-text: #0f172a;
-  --window-bg: #ffffff;
-  --window-text: #0f172a;
-  --window-titlebar-bg: rgba(248, 250, 252, 0.95);
-  --window-titlebar-text: #475569;
-  --window-border: rgba(0, 0, 0, 0.1);
-  --window-shadow-active: 0 24px 60px rgba(180, 83, 9, 0.15), 0 8px 24px rgba(0, 0, 0, 0.2);
-  --window-shadow-inactive: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
-  --wallpaper-filter: brightness(1.05) saturate(1.1) hue-rotate(-8deg);
-  --wallpaper-overlay: linear-gradient(135deg, rgba(251, 146, 60, 0.3) 0%, rgba(254, 215, 170, 0.15) 50%, rgba(15, 23, 42, 0.35) 100%);
-  --wallpaper-tint: rgba(245, 158, 11, 0.12);
-}
-
-[data-theme="siang"] {
+[data-theme="light"] {
+  color-scheme: light;
   --theme-accent: #0284c7;
   --theme-accent-hover: #0369a1;
   --topbar-bg: rgba(255, 255, 255, 0.55);
+  [data-theme="light"] {
+  --menu-item-hover: rgba(0, 0, 0, 0.05);
+}
+[data-theme="dark"] {
+  --menu-item-hover: rgba(255, 255, 255, 0.1);
+}
   --topbar-text: #0f172a;
   --topbar-text-muted: rgba(15, 23, 42, 0.7);
   --topbar-border: rgba(255, 255, 255, 0.5);
@@ -70,29 +55,6 @@
   --wallpaper-filter: brightness(1.15) saturate(1.15) contrast(1.04);
   --wallpaper-overlay: linear-gradient(180deg, rgba(56, 189, 248, 0.22) 0%, rgba(186, 230, 253, 0.1) 50%, rgba(15, 23, 42, 0.3) 100%);
   --wallpaper-tint: rgba(14, 165, 233, 0.08);
-}
-
-[data-theme="sore"] {
-  --theme-accent: #e11d48;
-  --theme-accent-hover: #be123c;
-  --topbar-bg: rgba(30, 25, 40, 0.6);
-  --topbar-text: #f8fafc;
-  --topbar-text-muted: rgba(248, 250, 252, 0.7);
-  --topbar-border: rgba(255, 255, 255, 0.18);
-  --dock-bg: rgba(45, 30, 50, 0.45);
-  --dock-border: rgba(255, 255, 255, 0.25);
-  --dock-tooltip-bg: #1f172a;
-  --dock-tooltip-text: #f8fafc;
-  --window-bg: #fafafa;
-  --window-text: #18181b;
-  --window-titlebar-bg: rgba(244, 244, 245, 0.95);
-  --window-titlebar-text: #52525b;
-  --window-border: rgba(0, 0, 0, 0.12);
-  --window-shadow-active: 0 24px 60px rgba(225, 29, 72, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
-  --window-shadow-inactive: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.1);
-  --wallpaper-filter: brightness(0.92) saturate(1.3) hue-rotate(-22deg);
-  --wallpaper-overlay: linear-gradient(160deg, rgba(225, 29, 72, 0.35) 0%, rgba(249, 115, 22, 0.25) 45%, rgba(15, 23, 42, 0.6) 100%);
-  --wallpaper-tint: rgba(244, 63, 94, 0.15);
 }
 
 /* ─── Global Theme Transitions (600–800ms) ──────────────── */
@@ -340,5 +302,78 @@
 
   .wallpaper-ambient-active {
     animation: none !important;
+  }
+}
+/* ===== Opening ===== */
+.opening {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 0 1rem;
+  background: var(--opening-bg, #050505);
+  color: #fff;
+  transition: opacity 0.8s ease;
+}
+html[data-opening="done"] .opening { display: none; }
+html[data-opening="exiting"] .opening { opacity: 0; pointer-events: none; }
+
+.opening-sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+.opening-name {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.9em;
+  font-size: clamp(1.75rem, 7vw, 5rem);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-align: center;
+  transition: opacity 0.5s ease, transform 0.8s ease;
+}
+html[data-opening="exiting"] .opening-name {
+  opacity: 0;
+  transform: scale(1.06);
+}
+
+.opening-word { display: inline-flex; padding-left: 0.3em; } /* imbangi letter-spacing */
+
+.opening-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: opening-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(300ms + var(--i) * 55ms);
+}
+@keyframes opening-in {
+  from { opacity: 0; transform: translateY(12px); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+
+/* Mobile: pecah dua baris IDRIS / ABDILLAH */
+@media (max-width: 639px) {
+  .opening-name { flex-direction: column; align-items: center; row-gap: 0.2em; }
+}
+
+/* Reduced motion: fade saja, tanpa stagger/blur, total ~1,2 dtk */
+/* Reduced motion: fade saja, tanpa stagger/blur, total ~1,2 dtk */
+@media (prefers-reduced-motion: reduce) {
+  .opening-letter {
+    animation: opening-fade 0.3s ease forwards !important;
+    animation-delay: 0s !important;
+  }
+  .opening {
+    transition: opacity 0.4s ease !important;
+  }
+  .opening-name {
+    transition: opacity 0.4s ease !important;
+    transform: none !important;
+  }
+  @keyframes opening-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 }

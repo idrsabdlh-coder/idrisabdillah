@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useTheme, ThemeMode, ThemePhase } from "@/context/ThemeContext";
@@ -22,24 +22,13 @@ const SOCIALS = [
 ];
 
 const THEME_OPTIONS: { id: ThemeMode; label: string; icon: string; desc: string }[] = [
-  { id: "auto", label: "Otomatis", icon: "⚡", desc: "Ikuti Jam Pengunjung" },
-  { id: "pagi", label: "Pagi", icon: "🌅", desc: "05:00 – 10:59" },
-  { id: "siang", label: "Siang", icon: "☀️", desc: "11:00 – 15:59" },
-  { id: "sore", label: "Sore", icon: "🌇", desc: "16:00 – 18:29" },
-  { id: "malam", label: "Malam", icon: "🌙", desc: "18:30 – 04:59" },
+  { id: "auto", label: "Otomatis", icon: "⚡", desc: "Ikuti Sistem" },
+  { id: "light", label: "Terang", icon: "☀️", desc: "Mode Terang" },
+  { id: "dark", label: "Gelap", icon: "🌙", desc: "Mode Gelap" },
 ];
 
 function getThemeSymbol(phase: ThemePhase): string {
-  switch (phase) {
-    case "pagi":
-      return "🌅";
-    case "siang":
-      return "☀️";
-    case "sore":
-      return "🌇";
-    case "malam":
-      return "🌙";
-  }
+  return phase === "dark" ? "🌙" : "☀️";
 }
 
 export default function TopBar() {
@@ -120,7 +109,9 @@ export default function TopBar() {
             }}
           >
             <span className="text-sm leading-none">{getThemeSymbol(phase)}</span>
-            <span className="capitalize">{mode === "auto" ? "Otomatis" : phase}</span>
+            <span className="capitalize">
+              {mode === "auto" ? "Otomatis" : phase === "dark" ? "Gelap" : "Terang"}
+            </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -145,8 +136,11 @@ export default function TopBar() {
                 color: "var(--window-text)",
               }}
             >
-              <div className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
-                Pilih Fase Waktu
+              <div
+                className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider theme-transition"
+                style={{ color: "var(--topbar-text-muted)" }}
+              >
+                Pilih Tampilan
               </div>
               <div className="space-y-0.5">
                 {THEME_OPTIONS.map((opt) => {
@@ -158,7 +152,7 @@ export default function TopBar() {
                         setMode(opt.id);
                         setMenuOpen(false);
                       }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-colors theme-transition hover:bg-[var(--menu-item-hover,rgba(0,0,0,0.05))]"
                       style={
                         isActive
                           ? {
