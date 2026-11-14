@@ -1,0 +1,1 @@
+export const CONSULTATION_FORM_URL = "https://forms.gle/yHJpfnnhKEp8TynK6";

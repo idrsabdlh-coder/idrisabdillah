@@ -87,7 +87,7 @@ export default function MusicWindow() {
       style={{ transform: `translate(-50%, -50%) translate(${pos.x}px, ${pos.y}px)` }}
     >
       <div className="relative w-[300px]">
-        <div className="bg-white rounded-[28px] shadow-2xl border border-black/10 p-4 pb-6">
+        <div data-theme="light" className="bg-white rounded-[28px] shadow-2xl border border-black/10 p-4 pb-6">
           {/* Titlebar */}
           <div
             onMouseDown={(e) => startDrag(e, "Music")}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useDesktop } from "@/context/DesktopContext";
+import { ICONS } from "@/lib/icons";
 
 // Maps window name → dock item index so we know which dot to show
 const WINDOW_TO_IDX: Record<string, number> = {
@@ -171,6 +172,24 @@ export default function Dock() {
             <span className="sr-only">Game</span>
           </button>
           {dot("Game")}
+        </li>
+          {/* Jasa Website */}
+        <li className="dock-item group relative">
+          <span className="tooltip">Jasa Website</span>
+          <button
+            onClick={() => {
+              toggleWindow("Services");
+              setActiveWindow("Services");
+              triggerBounce(4);
+            }}
+            className={`dock-link w-14 h-14 rounded-2xl bg-gradient-to-b from-sky-400 to-blue-600 flex items-center justify-center shadow-sm${bouncing[4] ? " dock-bounce" : ""}`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
+              <path d={ICONS.globe} />
+            </svg>
+            <span className="sr-only">Jasa Website</span>
+          </button>
+          {dot("Services")}
         </li>
 
         {/* Separator */}

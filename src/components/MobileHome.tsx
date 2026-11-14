@@ -8,7 +8,7 @@ import { ICONS } from "@/lib/icons";
 type MobileApp = {
   key: string;
   title: string;
-  kind: "about" | "project" | "music" | "resume" | "game";
+  kind: "about" | "project" | "music" | "resume" | "game" | "services";
   iconImg?: string;
   icon?: string;
   emoji?: string;
@@ -31,6 +31,7 @@ export default function MobileHome() {
   const mobileApps: MobileApp[] = [
     { key: "about", title: "About Me", kind: "about", color: "bg-blue-500" },
     { key: "Resume", title: "Resume", kind: "resume", color: "bg-amber-400" },
+    { key: "Services", title: "Jasa Website", kind: "services", icon: "globe", color: "bg-gradient-to-b from-sky-400 to-blue-600" },
     ...Object.keys(PROJECTS).map((k) => ({
       key: k,
       title: PROJECTS[k].title,
@@ -74,6 +75,8 @@ export default function MobileHome() {
       openWindow("Resume");
     } else if (app.kind === "game") {
       openWindow("Game");
+    } else if (app.kind === "services") {
+      openWindow("Services");
     }
   }
 

@@ -5,6 +5,7 @@ import WindowTitlebar from "@/components/WindowTitlebar";
 import { useDesktop } from "@/context/DesktopContext";
 import { PROJECTS } from "@/lib/data";
 import { ICONS } from "@/lib/icons";
+import { CONSULTATION_FORM_URL } from "@/lib/links";
 
 export default function ProjectsWindow() {
   const { projectEntry, setProjectEntry } = useDesktop();
@@ -97,6 +98,17 @@ export default function ProjectsWindow() {
           {/* Detail proyek */}
           <div className="flex-1 overflow-y-auto">
             <div className="p-6 pb-10">
+              <div className="mt-8 pt-6 border-t border-black/5">
+                <p className="text-sm text-neutral-500 mb-3">Tertarik punya website seperti ini?</p>
+                <a
+                  href={CONSULTATION_FORM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-700"
+                >
+                  Mulai Bangun Website Anda
+                </a>
+              </div>
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-2xl font-bold">{project.title}</h3>
                 {project.visit && (
