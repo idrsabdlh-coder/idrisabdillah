@@ -13,6 +13,7 @@ import ResumeWindow from "@/components/windows/ResumeWindow";
 import ProjectsWindow from "@/components/windows/ProjectsWindow";
 import MusicWindow from "@/components/windows/MusicWindow";
 import GameWindow from "@/components/windows/GameWindow";
+import ServicesWindow from "@/components/windows/ServicesWindow";
 
 const PHASE_STYLES: Record<
   ThemePhase,
@@ -153,6 +154,7 @@ export default function Home() {
         <ProjectsWindow />
         <MusicWindow />
         <GameWindow />
+        <ServicesWindow />
       </main>
     </DesktopProvider>
   );
