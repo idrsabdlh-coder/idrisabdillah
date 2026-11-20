@@ -11,10 +11,11 @@ export default function Opening() {
     const html = document.documentElement;
     const home = document.getElementById("app-root");
 
-    // Pengunjung lama: script di <head> sudah menandai "done"
+    // Pengunjung lama: script di <head> sudah menandai "done" (CSS sudah menyembunyikan
+    // overlay), tinggal melepasnya dari DOM.
     if (html.dataset.opening === "done") {
-      setGone(true);
-      return;
+      const raf = requestAnimationFrame(() => setGone(true));
+      return () => cancelAnimationFrame(raf);
     }
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

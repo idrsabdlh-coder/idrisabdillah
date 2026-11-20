@@ -59,10 +59,10 @@ export default function AboutWindow() {
   const [tab, setTab] = useState<Tab>("Profil");
 
   return (
-    <Window name="about" widthClass="w-[36rem]">
+    <Window name="about" widthClass="w-[44rem] lg:w-[48rem]">
       <div
         data-theme="light"
-        className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
+        className="h-full md:h-auto md:max-h-[82vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
       >
         <WindowTitlebar name="about" title="About Me" />
 
@@ -101,12 +101,14 @@ export default function AboutWindow() {
                 </div>
               </div>
 
-              <div
-                  data-theme="light"
-                  className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
-                >
-                Mahasiswa Pendidikan Teknik Informatika (Semester 7) Universitas Muhammadiyah Surakarta yang
-                berfokus pada Software Development.
+              <div className="text-sm text-neutral-600 leading-relaxed space-y-2 mt-4 pt-4 border-t border-neutral-200/80">
+                <p>
+                  Mahasiswa Pendidikan Teknik Informatika (Semester 7) Universitas Muhammadiyah Surakarta yang
+                  berfokus pada Software Development, web development modern, dan sistem berbasis database.
+                </p>
+                <p>
+                  Berpengalaman membangun aplikasi web responsif mulai dari backend API hingga antarmuka pengguna interaktif yang nyaman digunakan di berbagai perangkat.
+                </p>
               </div>
             </>
           )}

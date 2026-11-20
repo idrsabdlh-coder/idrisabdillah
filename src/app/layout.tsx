@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
-import Opening from "@/components/Opening";
-
 export const metadata: Metadata = {
   title: "Idris Abdillah - homepage",
   description: "Homepage",
@@ -14,7 +12,11 @@ const initScript = `
 try{var d=document.documentElement,t=localStorage.getItem('portfolio-theme-mode');
 if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}
 d.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}
-try{document.documentElement.dataset.opening=sessionStorage.getItem('opening-seen')==='1'?'done':'running'}catch(e){document.documentElement.dataset.opening='running'}
+try{
+  var p=window.location.pathname;
+  if(p&&p!=='/'){document.documentElement.dataset.opening='done'}
+  else{document.documentElement.dataset.opening=sessionStorage.getItem('opening-seen')==='1'?'done':'running'}
+}catch(e){document.documentElement.dataset.opening='done'}
 `;
 
 export default function RootLayout({
@@ -30,9 +32,8 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: initScript }}
         />
-        <Opening />
         <ThemeProvider>
-          <div id="app-root">{children}</div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

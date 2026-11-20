@@ -212,7 +212,7 @@ export default function GameWindow() {
           )}
         </div>
 
-        {/* D-pad on-screen — kontrol utama untuk mobile, muncul selama game berjalan */}
+        {/* D-pad on-screen: kontrol utama untuk mobile, muncul selama game berjalan */}
         {running && !gameOver && (
           <div className="md:hidden mt-5 grid grid-cols-3 grid-rows-3 gap-2 w-[168px] select-none">
             <span />

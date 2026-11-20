@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Window from "@/components/Window";
 import { useDesktop } from "@/context/DesktopContext";
 import { SONGS } from "@/lib/data";
 

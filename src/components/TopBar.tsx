@@ -38,9 +38,14 @@ export default function TopBar() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
+    const tick = () => setNow(new Date());
+    // Jam diisi di client saja (hindari hydration mismatch), lalu diperbarui tiap detik
+    const first = setTimeout(tick, 0);
+    const id = setInterval(tick, 1000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(id);
+    };
   }, []);
 
   // Tutup menu saat klik di luar

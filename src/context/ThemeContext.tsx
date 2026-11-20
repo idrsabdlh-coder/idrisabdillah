@@ -39,29 +39,44 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const timeInPhaseRef = useRef(0);
   const isVisibleRef = useRef(true);
 
-  // Inisialisasi dari localStorage di client setelah mount
+  // Inisialisasi dari localStorage di client setelah mount.
+  // Atribut data-theme sudah dipasang script di <head> sebelum paint, jadi state cukup
+  // diselaraskan sebelum paint berikutnya (microtask), bukan sinkron di body effect.
   useEffect(() => {
-    let savedMode: ThemeMode = "auto";
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "auto" || stored === "dark" || stored === "light") {
-        savedMode = stored;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      let savedMode: ThemeMode = "auto";
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === "auto" || stored === "dark" || stored === "light") {
+          savedMode = stored;
+        }
+      } catch {
+        // Abaikan jika localStorage tidak diizinkan oleh browser
       }
-    } catch {
-      // Abaikan jika localStorage tidak diizinkan oleh browser
-    }
 
-    setModeState(savedMode);
-    const initialPhase = savedMode === "auto" ? getSystemPhase() : savedMode;
-    setPhase(initialPhase);
-    document.documentElement.setAttribute("data-theme", initialPhase);
+      setModeState(savedMode);
+      const initialPhase = savedMode === "auto" ? getSystemPhase() : savedMode;
+      setPhase(initialPhase);
+      document.documentElement.setAttribute("data-theme", initialPhase);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  // Ambient direset setiap kali phase berganti (disesuaikan saat render, bukan di effect)
+  const [prevPhase, setPrevPhase] = useState(phase);
+  if (phase !== prevPhase) {
+    setPrevPhase(phase);
+    setIsAmbientActive(false);
+  }
 
   // Update atribut data-theme setiap kali phase berganti
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", phase);
     timeInPhaseRef.current = 0;
-    setIsAmbientActive(false);
   }, [phase]);
 
   const setMode = useCallback((newMode: ThemeMode) => {

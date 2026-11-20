@@ -20,9 +20,9 @@ const EXPERIENCE = [
     desc: "Berkontribusi aktif dalam program dan kegiatan departemen, berkolaborasi dengan anggota lain dalam merencanakan dan melaksanakan program kerja secara efektif.",
   },
   {
-    period: "Mar 2026 – Jun 2026",
+    period: "Mar 2026 - Jun 2026",
     place: "Tim",
-    title: "Smart Water Tank — Proyek IoT",
+    title: "Smart Water Tank: Proyek IoT",
     org: "github.com/idrsabdlh-coder",
     desc: "Merancang sistem monitoring dan otomasi tandon air berbasis ESP32 dengan sensor ultrasonik dan turbiditas, terintegrasi Blynk IoT Cloud.",
   },
@@ -43,10 +43,10 @@ export default function ResumeWindow() {
   const [tab, setTab] = useState<Tab>("Ringkasan");
 
   return (
-    <Window name="Resume" widthClass="w-[56rem]">
+    <Window name="Resume" widthClass="w-[56rem] lg:w-[62rem]">
       <div
         data-theme="light"
-        className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
+        className="h-full md:h-[84vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
       >
         <WindowTitlebar name="Resume" />
 

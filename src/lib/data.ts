@@ -150,15 +150,15 @@ export const PROJECTS: Record<string, Project> = {
   kedaikopimu: {
     title: "Kedai Kopi Mu",
     category: "F&B / E-commerce Katalog Kopi",
-    client: "Demo Project — ditawarkan ke calon client",
-    desc: "Website katalog dan pemesanan online untuk kedai kopi, dibuat sebagai contoh proyek untuk ditawarkan ke calon client di segmen F&B. Menyajikan beranda, daftar menu kopi, detail tiap produk, keranjang belanja, dan halaman profil kedai — menunjukkan kemampuan membangun toko online sederhana yang siap dipakai UMKM kopi.",
+    client: "Demo Project (ditawarkan ke calon client)",
+    desc: "Website katalog dan pemesanan online untuk kedai kopi, dibuat sebagai contoh proyek untuk ditawarkan ke calon client di segmen F&B. Menyajikan beranda, daftar menu kopi, detail tiap produk, keranjang belanja, dan halaman profil kedai, menunjukkan kemampuan membangun toko online sederhana yang siap dipakai UMKM kopi.",
     icon: "invoice",
     iconImg: "/images/projects/kedaikopimu/icon.jpeg",
     visit: "https://kedai-kopi-mu.vercel.app/",
     visitLabel: "vercel",
     hero: "/images/projects/kedaikopimu/hero.jpeg",
     challenges: {
-      text: "Tantangan utama adalah merancang alur belanja yang ringkas — dari menjelajah menu, membuka detail produk, sampai checkout di keranjang — serta menjaga tampilan daftar menu tetap rapi dan enak dilihat meski kategori produknya beragam (biji kopi, minuman dingin, alat seduh, kotak hadiah).",
+      text: "Tantangan utama adalah merancang alur belanja yang ringkas, dari menjelajah menu, membuka detail produk, sampai checkout di keranjang, serta menjaga tampilan daftar menu tetap rapi dan enak dilihat meski kategori produknya beragam (biji kopi, minuman dingin, alat seduh, kotak hadiah).",
       images: ["/images/projects/kedaikopimu/challenge-1.jpeg", "/images/projects/kedaikopimu/challenge-2.jpeg"],
     },
     finalThoughts: {
