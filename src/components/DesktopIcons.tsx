@@ -54,7 +54,7 @@ export default function DesktopIcons() {
         );
       })}
 
-      {/* Music icon — stagger after project icons */}
+      {/* Music icon: stagger after project icons */}
       <button
         onClick={() => toggleWindow("Music")}
         className="flex flex-col items-center gap-1.5 w-20 group"

@@ -1,16 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import Image from "next/image";
 import { useDesktop } from "@/context/DesktopContext";
 import { ICONS } from "@/lib/icons";
-
-// Maps window name → dock item index so we know which dot to show
-const WINDOW_TO_IDX: Record<string, number> = {
-  about: 0,
-  Resume: 1,
-  Projects: 2,
-  Game: 3,
-};
 
 export default function Dock() {
   const { toggleWindow, openWindow, openWindows, setProjectEntry, setActiveWindow } = useDesktop();
@@ -98,7 +91,7 @@ export default function Dock() {
             }}
             className={`dock-link w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center text-white overflow-hidden${bouncing[0] ? " dock-bounce" : ""}`}
           >
-            <img src="/images/profile.jpg" alt="" className="w-full h-full object-cover" />
+            <Image src="/images/profile.jpg" alt="" width={56} height={56} className="w-full h-full object-cover" />
             <span className="sr-only">About Me</span>
           </button>
           {dot("about")}

@@ -14,6 +14,7 @@ import ProjectsWindow from "@/components/windows/ProjectsWindow";
 import MusicWindow from "@/components/windows/MusicWindow";
 import GameWindow from "@/components/windows/GameWindow";
 import ServicesWindow from "@/components/windows/ServicesWindow";
+import Opening from "@/components/Opening";
 
 const PHASE_STYLES: Record<
   ThemePhase,
@@ -66,27 +67,33 @@ function ParallaxWallpaper() {
     if (phase === displayedPhase) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
-      setDisplayedPhase(phase);
-      setIncomingPhase(null);
-      setIncomingOpacity(0);
-      return;
-    }
+    let raf2 = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
-    setIncomingPhase(phase);
-    // Jalankan transisi opacity di frame berikutnya
-    const raf = requestAnimationFrame(() => {
-      setIncomingOpacity(1);
+    const raf1 = requestAnimationFrame(() => {
+      if (reducedMotion) {
+        setDisplayedPhase(phase);
+        setIncomingPhase(null);
+        setIncomingOpacity(0);
+        return;
+      }
+
+      // Lapisan baru dirender dulu dengan opacity 0, lalu transisi opacity di frame berikutnya
+      setIncomingPhase(phase);
+      raf2 = requestAnimationFrame(() => {
+        setIncomingOpacity(1);
+      });
+
+      timer = setTimeout(() => {
+        setDisplayedPhase(phase);
+        setIncomingPhase(null);
+        setIncomingOpacity(0);
+      }, 1800);
     });
 
-    const timer = setTimeout(() => {
-      setDisplayedPhase(phase);
-      setIncomingPhase(null);
-      setIncomingOpacity(0);
-    }, 1800);
-
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
       clearTimeout(timer);
     };
   }, [phase, displayedPhase]);
@@ -141,21 +148,24 @@ function ParallaxWallpaper() {
 export default function Home() {
   return (
     <DesktopProvider>
-      <main className="relative min-h-screen overflow-hidden bg-black theme-transition">
-        <ParallaxWallpaper />
+      <Opening />
+      <div id="app-root">
+        <main className="relative min-h-screen overflow-hidden bg-black theme-transition">
+          <ParallaxWallpaper />
 
-        <TopBar />
-        <Dock />
-        <DesktopIcons />
-        <MobileHome />
+          <TopBar />
+          <Dock />
+          <DesktopIcons />
+          <MobileHome />
 
-        <AboutWindow />
-        <ResumeWindow />
-        <ProjectsWindow />
-        <MusicWindow />
-        <GameWindow />
-        <ServicesWindow />
-      </main>
+          <AboutWindow />
+          <ResumeWindow />
+          <ProjectsWindow />
+          <MusicWindow />
+          <GameWindow />
+          <ServicesWindow />
+        </main>
+      </div>
     </DesktopProvider>
   );
 }

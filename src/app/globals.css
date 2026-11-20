@@ -392,3 +392,22 @@ html[data-opening="exiting"] .opening-name {
 [data-theme="dark"] .text-neutral-500:not([data-theme="light"] *),
 [data-theme="dark"] .text-neutral-400:not([data-theme="light"] *),
 [data-theme="dark"] .text-neutral-300:not([data-theme="light"] *) { color: #94a3b8; }
+
+/* ─── Interactive Affordances (R-39) ────────────────────── */
+a[href],
+button:not(:disabled),
+summary,
+select:not(:disabled),
+label[for],
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+button:disabled,
+select:disabled,
+input:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}

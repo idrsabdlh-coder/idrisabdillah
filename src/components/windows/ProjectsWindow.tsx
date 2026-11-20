@@ -5,7 +5,7 @@ import WindowTitlebar from "@/components/WindowTitlebar";
 import { useDesktop } from "@/context/DesktopContext";
 import { PROJECTS } from "@/lib/data";
 import { ICONS } from "@/lib/icons";
-import { CONSULTATION_FORM_URL } from "@/lib/links";
+import { CONSULTATION_URL } from "@/lib/links";
 
 export default function ProjectsWindow() {
   const { projectEntry, setProjectEntry } = useDesktop();
@@ -13,10 +13,10 @@ export default function ProjectsWindow() {
   const keys = Object.keys(PROJECTS);
 
   return (
-    <Window name="Projects" widthClass="w-[56rem]">
+    <Window name="Projects" widthClass="w-[58rem] lg:w-[64rem] xl:w-[68rem]">
       <div
         data-theme="light"
-        className="h-[80vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
+        className="h-full md:h-[84vh] flex flex-col bg-[var(--window-bg)] text-[var(--window-text)]"
       >
         <WindowTitlebar
           name="Projects"
@@ -32,7 +32,7 @@ export default function ProjectsWindow() {
         />
 
         <div className="flex flex-1 overflow-hidden flex-col md:flex-row">
-          {/* Sidebar list proyek — desktop only */}
+          {/* Sidebar list proyek (desktop only) */}
           <div className="hidden md:block w-56 border-r border-black/10 overflow-y-auto shrink-0 py-4 px-3">
             <p className="text-xs font-medium text-neutral-400 px-2 mb-1.5">Projects</p>
             {keys.map((key) => {
@@ -62,7 +62,7 @@ export default function ProjectsWindow() {
             })}
           </div>
 
-          {/* Selector proyek — mobile only, chip horizontal yang bisa discroll */}
+          {/* Selector proyek (mobile only, chip horizontal yang bisa discroll) */}
           <div className="md:hidden shrink-0 border-b border-black/10 py-3 px-4 overflow-x-auto">
             <div className="flex items-center gap-2 w-max">
               {keys.map((key) => {
@@ -101,7 +101,7 @@ export default function ProjectsWindow() {
               <div className="mt-8 pt-6 border-t border-black/5">
                 <p className="text-sm text-neutral-500 mb-3">Tertarik punya website seperti ini?</p>
                 <a
-                  href={CONSULTATION_FORM_URL}
+                  href={CONSULTATION_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-700"

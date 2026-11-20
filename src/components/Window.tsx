@@ -1,6 +1,14 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState, createContext, useContext } from "react";
+import {
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  createContext,
+  useContext,
+} from "react";
 import { useDesktop } from "@/context/DesktopContext";
 
 // ─── CloseInterceptor context ─────────────────────────────────────────────────
@@ -32,6 +40,18 @@ function CloseInterceptor({
 
 // ─── Window ───────────────────────────────────────────────────────────────────
 
+const DESKTOP_QUERY = "(min-width: 768px)";
+
+function subscribeDesktop(onChange: () => void) {
+  const mq = window.matchMedia(DESKTOP_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getDesktopSnapshot() {
+  return window.matchMedia(DESKTOP_QUERY).matches;
+}
+
 type WindowProps = {
   name: string;
   widthClass?: string;
@@ -40,17 +60,10 @@ type WindowProps = {
 
 export default function Window({ name, widthClass = "w-[36rem]", children }: WindowProps) {
   const { isOpen, closeWindow, positions, activeWindow, setActiveWindow } = useDesktop();
-  const [isDesktop, setIsDesktop] = useState(true);
+  // Server dan render pertama menganggap desktop, lalu mengikuti media query di client
+  const isDesktop = useSyncExternalStore(subscribeDesktop, getDesktopSnapshot, () => true);
   const [isClosing, setIsClosing] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   // Clean up timer on unmount
   useEffect(() => {
@@ -59,15 +72,16 @@ export default function Window({ name, widthClass = "w-[36rem]", children }: Win
     };
   }, []);
 
-  // Reset isClosing when window is re-opened
-  useEffect(() => {
-    if (isOpen(name)) {
-      setIsClosing(false);
-    }
-  }, [isOpen, name]);
+  // Reset isClosing when window is re-opened (disesuaikan saat render, bukan di effect)
+  const open = isOpen(name);
+  const [wasOpen, setWasOpen] = useState(open);
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) setIsClosing(false);
+  }
 
   // Not open and not in closing animation → render nothing
-  if (!isOpen(name) && !isClosing) return null;
+  if (!open && !isClosing) return null;
 
   const pos = positions[name] ?? { x: 0, y: 0 };
   const isActive = activeWindow === name;
@@ -106,7 +120,7 @@ export default function Window({ name, widthClass = "w-[36rem]", children }: Win
       onMouseDown={handleMouseDown}
     >
       <div
-        className={`relative ${widthClass} max-w-[92vw] max-h-[80vh] rounded-2xl
+        className={`relative ${widthClass} max-w-[95vw] max-h-[86vh] rounded-2xl
                     overflow-hidden flex flex-col theme-transition
                     ${isClosing
                       ? "animate-[windowOut_0.18s_ease-in_forwards]"
