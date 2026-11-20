@@ -238,6 +238,45 @@ export default function KonsultasiClientShell({ children }: { children: ReactNod
 
             {/* Window Content Body */}
             <div className="flex-1 min-h-0 overflow-y-auto p-6 md:p-8 lg:p-10 select-text">
+              {/* Contoh Karya Website Banner for Desktop & Tablet */}
+              <div className="mb-6 p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80 shadow-xs">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse" />
+                    <h2 className="text-sm font-bold text-neutral-900">
+                      Contoh Karya Website:
+                    </h2>
+                    <span className="text-xs text-neutral-500">
+                      (Inspirasi untuk proyek website Kakak)
+                    </span>
+                  </div>
+                  <span className="text-xs text-neutral-400 font-medium">4 Proyek Portofolio</span>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {PROYEK_SHOWCASE.map((p) => (
+                    <div
+                      key={p.nama}
+                      className="group rounded-xl overflow-hidden border border-neutral-200 bg-white shadow-xs hover:shadow-md hover:border-sky-300 transition-all"
+                    >
+                      <div className="relative h-24 w-full overflow-hidden bg-neutral-100">
+                        <Image
+                          src={p.gambar}
+                          alt={p.nama}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 1024px) 240px, 200px"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                      <div className="p-2.5">
+                        <p className="text-xs font-bold text-neutral-900 truncate">{p.nama}</p>
+                        <p className="text-[11px] text-neutral-500 truncate mt-0.5">{p.kategori}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {children}
             </div>
           </div>

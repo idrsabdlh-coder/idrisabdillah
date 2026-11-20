@@ -49,27 +49,41 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const pool = getPool();
-  const ip = ambilIpKlien(req);
-  const laju = await cekDanCatatLaju(
-    pool,
-    `mulai:${ip}`,
-    MAKS_MULAI_PER_JAM,
-    SATU_JAM_MS,
-  );
-  if (!laju.diizinkan) {
+  try {
+    const pool = getPool();
+    const ip = ambilIpKlien(req);
+    const laju = await cekDanCatatLaju(
+      pool,
+      `mulai:${ip}`,
+      MAKS_MULAI_PER_JAM,
+      SATU_JAM_MS,
+    );
+    if (!laju.diizinkan) {
+      return jsonNoStore(
+        { error: "Terlalu banyak permintaan. Coba lagi dalam 1 jam." },
+        429,
+      );
+    }
+
+    const hasil = await buatKonsultasiBaru(pool, { nama, wa });
     return jsonNoStore(
-      { error: "Terlalu banyak permintaan. Coba lagi dalam 1 jam." },
-      429,
+      {
+        token: hasil.token,
+        kode: hasil.kode,
+      },
+      201,
+    );
+  } catch (err) {
+    const pesan = err instanceof Error ? err.message : String(err);
+    console.error("Gagal memulai konsultasi:", pesan);
+    return jsonNoStore(
+      {
+        error:
+          process.env.NODE_ENV === "production" && !pesan.includes("DATABASE_URL")
+            ? "Gagal terhubung ke basis data. Coba beberapa saat lagi."
+            : `Kendala basis data: ${pesan}`,
+      },
+      500,
     );
   }
-
-  const hasil = await buatKonsultasiBaru(pool, { nama, wa });
-  return jsonNoStore(
-    {
-      token: hasil.token,
-      kode: hasil.kode,
-    },
-    201,
-  );
 }

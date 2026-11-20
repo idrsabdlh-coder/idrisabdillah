@@ -11,7 +11,7 @@ declare global {
 export function getPool(): mysql.Pool {
   const url = process.env.DATABASE_URL;
   if (!url) {
-    throw new Error("Variabel lingkungan DATABASE_URL belum diisi.");
+    throw new Error("Variabel lingkungan DATABASE_URL belum diatur di server (Vercel).");
   }
 
   const isRemote =

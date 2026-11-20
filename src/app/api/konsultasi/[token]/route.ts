@@ -16,20 +16,25 @@ type RouteCtx = { params: Promise<{ token: string }> };
  * Mengembalikan 404 bila token salah. Tidak pernah memuat `catatan` maupun `token_hash`.
  */
 export async function GET(_req: NextRequest, ctx: RouteCtx) {
-  const { token } = await ctx.params;
-  const pool = getPool();
-  const data = await ambilKonsultasiDariToken(pool, token);
-  if (!data) {
-    return jsonNoStore({ error: "Konsultasi tidak ditemukan." }, 404);
-  }
+  try {
+    const { token } = await ctx.params;
+    const pool = getPool();
+    const data = await ambilKonsultasiDariToken(pool, token);
+    if (!data) {
+      return jsonNoStore({ error: "Konsultasi tidak ditemukan." }, 404);
+    }
 
-  return jsonNoStore({
-    konsultasi: data.konsultasi,
-    definisi: data.definisi,
-    jawaban: data.jawaban,
-    statusLog: data.statusLog,
-    tampil: ringkasanTampil(data),
-  });
+    return jsonNoStore({
+      konsultasi: data.konsultasi,
+      definisi: data.definisi,
+      jawaban: data.jawaban,
+      statusLog: data.statusLog,
+      tampil: ringkasanTampil(data),
+    });
+  } catch (err) {
+    const pesan = err instanceof Error ? err.message : String(err);
+    return jsonNoStore({ error: `Gagal memuat konsultasi: ${pesan}` }, 500);
+  }
 }
 
 /**
@@ -44,28 +49,33 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx) {
     return jsonNoStore({ error: "Format permintaan tidak valid." }, 400);
   }
 
-  const pool = getPool();
+  try {
+    const pool = getPool();
 
-  if (typeof body.tetapkanJenis === "string") {
-    const res = await tetapkanJenisKonsultasi(pool, token, body.tetapkanJenis as Jenis);
-    if (!res.ok) return jsonNoStore({ error: res.pesan }, res.status);
-    return jsonNoStore({ ok: true, jenis: res.jenis });
+    if (typeof body.tetapkanJenis === "string") {
+      const res = await tetapkanJenisKonsultasi(pool, token, body.tetapkanJenis as Jenis);
+      if (!res.ok) return jsonNoStore({ error: res.pesan }, res.status);
+      return jsonNoStore({ ok: true, jenis: res.jenis });
+    }
+
+    const kunci = typeof body.kunci === "string" ? body.kunci.trim() : "";
+    if (!kunci) {
+      return jsonNoStore({ error: "Kunci pertanyaan wajib diisi." }, 422);
+    }
+
+    const res = await simpanJawabanKonsultasi(pool, token, kunci, body.nilai);
+    if (!res.ok) {
+      return jsonNoStore({ error: res.pesan, galat: res.galat }, res.status);
+    }
+
+    return jsonNoStore({
+      ok: true,
+      kunci: res.kunci,
+      nilai: res.nilai,
+      jenis: res.jenis,
+    });
+  } catch (err) {
+    const pesan = err instanceof Error ? err.message : String(err);
+    return jsonNoStore({ error: `Gagal menyimpan jawaban: ${pesan}` }, 500);
   }
-
-  const kunci = typeof body.kunci === "string" ? body.kunci.trim() : "";
-  if (!kunci) {
-    return jsonNoStore({ error: "Kunci pertanyaan wajib diisi." }, 422);
-  }
-
-  const res = await simpanJawabanKonsultasi(pool, token, kunci, body.nilai);
-  if (!res.ok) {
-    return jsonNoStore({ error: res.pesan, galat: res.galat }, res.status);
-  }
-
-  return jsonNoStore({
-    ok: true,
-    kunci: res.kunci,
-    nilai: res.nilai,
-    jenis: res.jenis,
-  });
 }

@@ -70,14 +70,18 @@ export default function KonsultasiMulai() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nama, wa, hp }),
       });
-      const data = (await res.json()) as {
-        token?: string;
-        kode?: string;
-        error?: string;
-      };
+      let data: { token?: string; kode?: string; error?: string } = {};
+      try {
+        data = (await res.json()) as { token?: string; kode?: string; error?: string };
+      } catch {
+        // Respons bukan JSON (misal halaman 500 dari penyedia hosting)
+      }
 
       if (!res.ok || !data.token || !data.kode) {
-        setGalat(data.error ?? "Gagal memulai konsultasi. Periksa isian Kakak.");
+        setGalat(
+          data.error ??
+            `Gagal terhubung ke server (Status ${res.status}). Pastikan konfigurasi database di Vercel sudah terpasang.`,
+        );
         return;
       }
 
