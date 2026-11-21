@@ -10,26 +10,33 @@ const SKILL_GROUPS: { title: string; skills: [string, string | null][] }[] = [
     title: "Bahasa & Framework",
     skills: [
       ["PHP", "php"],
+      ["Laravel", "laravel"],
+      ["MySQL", "mysql"],
       ["Python", "python"],
       ["JavaScript", "javascript"],
-      ["HTML", "html5"],
-      ["CSS", "css"],
-      ["Laravel", "laravel"],
+      ["Next.js", "nextdotjs"],
       ["Tailwind CSS", "tailwindcss"],
-      ["Django", "django"],
-      ["MySQL", "mysql"],
-      ["Relational Database", null],
+      ["HTML5", "html5"],
+      ["CSS3", "css"],
     ],
   },
   {
     title: "Development & Tools",
     skills: [
-      ["Git", "git"],
       ["GitHub", "github"],
-      ["REST API", null],
       ["VS Code", "visualstudiocode"],
       ["Vite", "vite"],
       ["Figma", "figma"],
+      ["Vercel", "vercel"],
+    ],
+  },
+  {
+    title: "IoT & Embedded Systems",
+    skills: [
+      ["ESP32", "espressif"],
+      ["Blynk IoT Cloud", null],
+      ["Sensor Ultrasonik", null],
+      ["Sensor Turbidity", null],
     ],
   },
   {
@@ -39,15 +46,6 @@ const SKILL_GROUPS: { title: string; skills: [string, string | null][] }[] = [
       ["Unity", "unity"],
       ["Godot Engine", "godotengine"],
       ["Construct 2 & 3", null],
-    ],
-  },
-  {
-    title: "IoT & Embedded Systems",
-    skills: [
-      ["ESP32", null],
-      ["Blynk IoT Cloud", null],
-      ["Sensor Ultrasonik", null],
-      ["Sensor Turbidity", null],
     ],
   },
 ];
@@ -91,9 +89,9 @@ export default function AboutWindow() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold">Idris Abdillah</h2>
-                  <p className="text-sm text-neutral-500">Informatics Engineering Education</p>
+                  <p className="text-sm text-neutral-500 font-medium">Junior Software Engineer</p>
                   <p className="text-xs text-neutral-400 mt-1">
-                    🎓 Universitas Muhammadiyah Surakarta
+                    🎓 S1 Pendidikan Teknik Informatika (Semester 7) · UMS
                     <br className="sm:hidden" />
                     <span className="hidden sm:inline">&nbsp;·&nbsp;</span>
                     📍 Surakarta, Indonesia
@@ -103,11 +101,14 @@ export default function AboutWindow() {
 
               <div className="text-sm text-neutral-600 leading-relaxed space-y-2 mt-4 pt-4 border-t border-neutral-200/80">
                 <p>
-                  Mahasiswa Pendidikan Teknik Informatika (Semester 7) Universitas Muhammadiyah Surakarta yang
-                  berfokus pada Software Development, web development modern, dan sistem berbasis database.
+                  Mahasiswa tingkat akhir Pendidikan Teknik Informatika (Semester 7) Universitas Muhammadiyah Surakarta yang
+                  berfokus pada Software Engineering dan pengembangan aplikasi web.
                 </p>
                 <p>
-                  Berpengalaman membangun aplikasi web responsif mulai dari backend API hingga antarmuka pengguna interaktif yang nyaman digunakan di berbagai perangkat.
+                  Berpengalaman membangun aplikasi dari perancangan arsitektur basis data relasional, logika backend (Laravel dan PHP Native),
+                  hingga antarmuka pengguna interaktif yang responsif. Telah menyelesaikan beragam proyek nyata meliputi sistem manajemen transaksi titip jual UMKM (Tenong App),
+                  platform sewa kamar kos (KostinAja), portal profil sekolah dan PPDB online, katalog e-commerce (Kedai Kopi Mu),
+                  hingga integrasi sistem otomasi IoT (Smart Water Tank ESP32).
                 </p>
               </div>
             </>

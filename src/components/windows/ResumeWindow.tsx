@@ -6,14 +6,14 @@ import WindowTitlebar from "@/components/WindowTitlebar";
 
 const EXPERIENCE = [
   {
-    period: "Jan 2026 – Feb 2026",
+    period: "Jan 2026 - Feb 2026",
     place: "Medan",
     title: "Ketua KKN (Kuliah Kerja Nyata)",
     org: "Universitas Muhammadiyah Surakarta",
     desc: "Memimpin tim mahasiswa dalam merencanakan dan melaksanakan program pengabdian masyarakat, berkoordinasi dengan masyarakat setempat dan pemangku kepentingan.",
   },
   {
-    period: "Okt 2024 – Sep 2025",
+    period: "Okt 2024 - Sep 2025",
     place: "Surakarta",
     title: "Anggota, Departemen 1 HMPPTI",
     org: "Himpunan Mahasiswa Pendidikan Teknik Informatika",
@@ -28,12 +28,24 @@ const EXPERIENCE = [
   },
 ];
 
-const SKILLS = [
-  "Laravel", "Git / GitHub",
-  "PHP", "MySQL",
-  "Python", "Figma / Canva",
-  "HTML", "Tailwind CSS",
-  "JavaScript", "Next.js",
+const SKILLS: [string, string | null][] = [
+  ["Laravel", "laravel"],
+  ["PHP", "php"],
+  ["MySQL", "mysql"],
+  ["Python", "python"],
+  ["JavaScript", "javascript"],
+  ["Next.js", "nextdotjs"],
+  ["Tailwind CSS", "tailwindcss"],
+  ["HTML5", "html5"],
+  ["CSS3", "css"],
+  ["GitHub", "github"],
+  ["VS Code", "visualstudiocode"],
+  ["Figma", "figma"],
+  ["Vercel", "vercel"],
+  ["ESP32", "espressif"],
+  ["Blender", "blender"],
+  ["Unity", "unity"],
+  ["Godot Engine", "godotengine"],
 ];
 
 const TABS = ["Ringkasan", "Keahlian", "Pengalaman"] as const;
@@ -71,28 +83,29 @@ export default function ResumeWindow() {
             <>
               <div>
                 <h1 className="text-2xl font-bold">Idris Abdillah</h1>
-                <p className="text-neutral-500 mt-1">Software Developer</p>
+                <p className="text-neutral-500 mt-1">Junior Software Engineer</p>
               </div>
 
               <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-neutral-500 mt-4 pb-4 border-b border-black/10">
-                <span><b className="text-neutral-800">Semester 7</b> Teknik Informatika</span>
+                <span><b className="text-neutral-800">Semester 7</b> Pendidikan Teknik Informatika</span>
                 <span className="text-neutral-300">|</span>
-                <span><b className="text-neutral-800">6+</b> Proyek Selesai</span>
+                <span><b className="text-neutral-800">6+</b> Portofolio Aplikasi</span>
                 <span className="text-neutral-300">|</span>
-                <span><b className="text-neutral-800">2+</b> Organisasi</span>
+                <span><b className="text-neutral-800">2+</b> Pengalaman Organisasi & KKN</span>
               </div>
 
               <p className="text-sm text-neutral-600 leading-relaxed mt-4">
-                Mahasiswa Pendidikan Teknik Informatika (Semester 7) Universitas Muhammadiyah Surakarta yang
-                berfokus pada Software Development. Berpengalaman mengembangkan aplikasi berbasis Laravel, PHP,
-                dan Python, termasuk Tenong App, Kostinaja, serta sistem monitoring IoT Smart Water Tank
-                menggunakan ESP32 dan Blynk.
+                Mahasiswa tingkat akhir Pendidikan Teknik Informatika (Semester 7) Universitas Muhammadiyah Surakarta yang
+                berfokus pada Software Engineering dan pengembangan aplikasi web. Selama perkuliahan, aktif membangun berbagai
+                solusi digital berbasis Laravel, PHP Native, MySQL, dan ekosistem modern, mulai dari sistem manajemen transaksi titip jual UMKM (Tenong App),
+                platform pencarian hunian kos (KostinAja), portal sekolah & PPDB online, katalog e-commerce (Kedai Kopi Mu),
+                hingga sistem otomasi dan monitoring IoT (Smart Water Tank) berbasis ESP32 dan Blynk Cloud.
               </p>
 
               <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm text-neutral-500 mt-6 pt-4 border-t border-black/10">
                 <span>jafaryabdilah@gmail.com</span>
                 <span>+62 856-6985-3336</span>
-                <span>2026</span>
+                <span>Surakarta, Indonesia</span>
               </div>
 
               <div className="mt-8">
@@ -100,16 +113,25 @@ export default function ResumeWindow() {
                 <div className="flex flex-wrap gap-x-2 text-sm">
                   <span className="font-medium">Universitas Muhammadiyah Surakarta</span>
                   <span className="text-neutral-400 hidden sm:inline">|</span>
-                  <span className="text-neutral-500">Pendidikan Teknik Informatika (2023 – Sekarang)</span>
+                  <span className="text-neutral-500">Pendidikan Teknik Informatika (2023 - Sekarang)</span>
                 </div>
               </div>
             </>
           )}
 
           {tab === "Keahlian" && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm text-neutral-600">
-              {SKILLS.map((s) => (
-                <p key={s}>· {s}</p>
+            <div className="flex flex-wrap gap-2.5">
+              {SKILLS.map(([skill, icon]) => (
+                <span
+                  key={skill}
+                  className="flex items-center gap-2 text-xs bg-neutral-100 border border-neutral-200 rounded-full px-3.5 py-1.5 text-neutral-800 font-medium hover:bg-neutral-200 transition-colors"
+                >
+                  {icon && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={`https://cdn.simpleicons.org/${icon}`} alt="" className="w-3.5 h-3.5" />
+                  )}
+                  {skill}
+                </span>
               ))}
             </div>
           )}

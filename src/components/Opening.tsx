@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-const WORDS = ["IDRIS", "ABDILLAH"];
+const FULL_NAME = "IDRIS ABDILLAH";
 
 export default function Opening() {
   const [gone, setGone] = useState(false);
+  const [displayedName, setDisplayedName] = useState("");
+  const [counter, setCounter] = useState(0);
+  const counterRef = useRef(0);
+  const nameRef = useRef("");
 
   useEffect(() => {
     const html = document.documentElement;
     const home = document.getElementById("app-root");
+    const isDev = process.env.NODE_ENV === "development";
 
-    // Pengunjung lama: script di <head> sudah menandai "done" (CSS sudah menyembunyikan
-    // overlay), tinggal melepasnya dari DOM.
-    if (html.dataset.opening === "done") {
+    // Pengunjung lama di production: script di <head> sudah menandai "done" (CSS sudah menyembunyikan
+    // overlay), tinggal melepasnya dari DOM. Di mode development (localhost), opening selalu dijalankan.
+    if (!isDev && html.dataset.opening === "done") {
       const raf = requestAnimationFrame(() => setGone(true));
       return () => cancelAnimationFrame(raf);
     }
@@ -26,6 +31,7 @@ export default function Opening() {
 
     let exiting = false;
     let finished = false;
+    let animationFrameId: number;
     const timers: number[] = [];
 
     const finish = () => {
@@ -33,30 +39,85 @@ export default function Opening() {
       finished = true;
       html.style.overflow = "";
       home?.removeAttribute("inert");
-      try {
-        sessionStorage.setItem("opening-seen", "1");
-      } catch {}
+      if (!isDev) {
+        try {
+          sessionStorage.setItem("opening-seen", "1");
+        } catch {}
+      }
       html.dataset.opening = "done";
-      setGone(true); // overlay dilepas dari DOM
+      setGone(true);
     };
 
     const exit = () => {
       if (exiting) return;
       exiting = true;
       timers.forEach(clearTimeout);
-      html.dataset.opening = "exiting"; // memicu animasi masuk menu bar & dock
-      timers.push(window.setTimeout(finish, reduce ? 400 : 800));
+      cancelAnimationFrame(animationFrameId);
+      setDisplayedName(FULL_NAME);
+      setCounter(100);
+      html.dataset.opening = "exiting";
+      // Durasi transisi sapuan tirai bertingkat (tiered wipe)
+      timers.push(window.setTimeout(finish, reduce ? 250 : 900));
     };
 
-    // Otomatis keluar setelah huruf selesai + tahan ~0,8 dtk
-    timers.push(window.setTimeout(exit, reduce ? 800 : 2300));
+    if (reduce) {
+      timers.push(
+        window.setTimeout(() => {
+          setDisplayedName(FULL_NAME);
+          setCounter(100);
+          exit();
+        }, 400)
+      );
+    } else {
+      // Pengetikan nama huruf per huruf dari awal sampai akhir, sinkron dengan counter 000 -> 100
+      // Total waktu pengalaman sekitar 7 detik (5.4 dtk ejaan + 0.7 dtk apresiasi nama utuh + 0.9 dtk sapuan tirai)
+      const startTime = performance.now();
+      const typingDuration = 5400;
 
-    // Skip: klik, tap, atau tombol apa pun
+      const updateTyping = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / typingDuration, 1);
+
+        // Hitung jumlah huruf yang dieja
+        const charCount = Math.min(
+          Math.floor(progress * (FULL_NAME.length + 1)),
+          FULL_NAME.length
+        );
+        const currentChars = FULL_NAME.slice(0, charCount);
+        if (currentChars !== nameRef.current) {
+          nameRef.current = currentChars;
+          setDisplayedName(currentChars);
+        }
+
+        // Hitung nilai counter 000 -> 100
+        const currentCounter = Math.floor(progress * 100);
+        if (currentCounter !== counterRef.current) {
+          counterRef.current = currentCounter;
+          setCounter(currentCounter);
+        }
+
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(updateTyping);
+        } else {
+          setDisplayedName(FULL_NAME);
+          nameRef.current = FULL_NAME;
+          setCounter(100);
+          counterRef.current = 100;
+          // Tahan sejenak setelah nama lengkap dieja sebelum tirai menyapu (~0.7 detik)
+          timers.push(window.setTimeout(exit, 700));
+        }
+      };
+
+      animationFrameId = requestAnimationFrame(updateTyping);
+    }
+
+    // Interaktivitas: tap / klik / tombol apa pun langsung membuka seketika
     window.addEventListener("pointerdown", exit);
     window.addEventListener("keydown", exit);
 
     return () => {
       timers.forEach(clearTimeout);
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("pointerdown", exit);
       window.removeEventListener("keydown", exit);
       html.style.overflow = "";
@@ -66,110 +127,64 @@ export default function Opening() {
 
   if (gone) return null;
 
-  let i = 0;
+  const formattedCounter = String(counter).padStart(3, "0");
+
   return (
-    <aside className="opening" role="status" aria-label="Idris Abdillah Portfolio">
-      <span className="opening-sr">Idris Abdillah - Portfolio</span>
+    <aside
+      className="opening"
+      role="status"
+      aria-label="Idris Abdillah - Junior Software Engineer"
+    >
+      <span className="opening-sr">
+        Idris Abdillah - Junior Software Engineer ({formattedCounter}%)
+      </span>
 
-      {/* Ambient Celestial Aura */}
-      <div className="opening-aura" aria-hidden="true" />
+      {/* Tiered Reveal Curtains (Inspirasi Video 2: Sapuan Tirai Bertingkat) */}
+      <div className="opening-curtain-wrap" aria-hidden="true">
+        <div className="opening-curtain-col col-1" />
+        <div className="opening-curtain-col col-2" />
+        <div className="opening-curtain-col col-3" />
+        <div className="opening-curtain-col col-4" />
+        <div className="opening-curtain-col col-5" />
+      </div>
 
-      {/* Minimalist Glassmorphic Emblem */}
-      <div className="opening-emblem-wrap" aria-hidden="true">
-        <div className="w-14 h-14 rounded-2xl border border-white/20 bg-gradient-to-b from-white/10 to-white/[0.02] backdrop-blur-xl shadow-[0_0_35px_rgba(56,189,248,0.25)] flex items-center justify-center">
-          <svg
-            className="w-7 h-7 text-white"
-            viewBox="0 0 36 36"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect
-              x="2"
-              y="2"
-              width="32"
-              height="32"
-              rx="9"
-              stroke="url(#emblem-stroke)"
-              strokeWidth="1.5"
-            />
-            <path
-              d="M12 11V25M12 11H9M12 25H9M12 11H15M12 25H15"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M24 11L18 25M24 11L30 25M19.5 20.5H28.5"
-              stroke="url(#emblem-accent)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <defs>
-              <linearGradient
-                id="emblem-stroke"
-                x1="0"
-                y1="0"
-                x2="36"
-                y2="36"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="rgba(255,255,255,0.7)" />
-                <stop offset="0.5" stopColor="rgba(56,189,248,0.85)" />
-                <stop offset="1" stopColor="rgba(255,255,255,0.15)" />
-              </linearGradient>
-              <linearGradient
-                id="emblem-accent"
-                x1="18"
-                y1="11"
-                x2="30"
-                y2="25"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#38bdf8" />
-                <stop offset="1" stopColor="#818cf8" />
-              </linearGradient>
-            </defs>
-          </svg>
+      {/* Stage Konten Utama */}
+      <div className="opening-stage">
+        {/* Label Atas Kecil */}
+        <p className="opening-eyebrow" aria-hidden="true">
+          PORTFOLIO // 2026
+        </p>
+
+        {/* Tipografi Nama Utama: Dieja dari Awal Hingga Terakhir */}
+        <h1 className="opening-title" aria-hidden="true">
+          <span className="opening-title-text">{displayedName}</span>
+          <span className="opening-cursor" />
+        </h1>
+
+        {/* Hairline Divider & Live Progress Bar */}
+        <div className="opening-hairline-track" aria-hidden="true">
+          <div
+            className="opening-hairline-fill"
+            style={{ width: `${counter}%` }}
+          />
+        </div>
+
+        {/* Centered Role & 3-Digit Counter */}
+        <div className="opening-meta-center" aria-hidden="true">
+          <p className="opening-meta-role">
+            Junior Software Engineer
+          </p>
+          <div className="opening-counter-badge">
+            <span className="opening-counter-dot" />
+            <span className="opening-meta-counter">{formattedCounter}</span>
+          </div>
         </div>
       </div>
 
-      {/* Typography: Staggered Letters with Metallic Glow */}
-      <div className="opening-name" aria-hidden="true">
-        {WORDS.map((word) => (
-          <span className="opening-word" key={word}>
-            {word.split("").map((ch) => (
-              <span
-                className="opening-letter"
-                style={{ ["--i" as string]: i++ }}
-                key={i}
-              >
-                {ch}
-              </span>
-            ))}
-          </span>
-        ))}
-      </div>
-
-      {/* Hairline Divider */}
-      <div className="opening-divider" aria-hidden="true" />
-
-      {/* Subtitle / Role */}
-      <div className="opening-subtitle" aria-hidden="true">
-        Creative Developer & Designer
-      </div>
-
-      {/* Luminous System Boot Progress Bar */}
-      <div className="opening-progress-track" aria-hidden="true">
-        <div className="opening-progress-bar" />
-      </div>
-
-      {/* Tactile Skip Prompt */}
-      <div className="opening-skip" aria-hidden="true">
-        <span className="opening-skip-dot" />
-        <span>Sentuh atau klik untuk lewati</span>
-      </div>
+      {/* Petunjuk Aksi Bersih di Bagian Bawah */}
+      <p className="opening-prompt" aria-hidden="true">
+        Ketuk untuk lewati
+      </p>
     </aside>
   );
 }

@@ -14,7 +14,9 @@ if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matche
 d.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}
 try{
   var p=window.location.pathname;
+  var isDev=window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1';
   if(p&&p!=='/'){document.documentElement.dataset.opening='done'}
+  else if(isDev){document.documentElement.dataset.opening='running'}
   else{document.documentElement.dataset.opening=sessionStorage.getItem('opening-seen')==='1'?'done':'running'}
 }catch(e){document.documentElement.dataset.opening='done'}
 `;
